@@ -5,51 +5,70 @@ require_once 'classes/Parsing.php';
 
 
 $countryArray = [
-    'USA' => '/en-us'
+    'USA' => '/en-us',
+//    'RUS' => '/ru-ru',
+//    'EVRO'  => '/de-de',
+//    'Argentina' => '/es-ar',
+//    'Brazil' => '/pt-br',
+//    'Canada' => '/en-ca',
+//    'Columbia' => '/es-co',
+//    'Hong-Kong' => '/en-hk',
+//    'India' => '/en-in',
+//    'South Africa' => '/en-za',
+//    'Turkish' => '/tr-tr',
+//    'Singapore' => '/en-sg',
+//    'Norvay' => '/nb-no',
+//    'Mexico' => '/es-mx',
+//    'Hungary' => '/hu-hu',
+//    'Israel' => '/en-il',
+//    'Japan' => '/ja-jp',
+//    'South Korea' => '/ko-kr',
+//    'Taiwann' => '/zh-tw',
+
+//    'Australia' => '/en-au',
+//    'England' => '/en-gb',
+//    'Dania' => '/da-dk',
+//    'New Zealand' => '/en-nz',
+//    'Poland' => '/pl-pl',
+//    'Switzerland' => '/de-ch',
+//    'Chili' => '/es-cl',
+//    'Czech' => '/cs-cz',
 ];
 
 $sitePage = [
         '/store/top-paid/games/xbox',
-        '/store/best-rated/games/xbox',
-        '/store/new/games/xbox',
-        '/store/top-free/games/xbox'
+//        '/store/best-rated/games/xbox',
+//        '/store/new/games/xbox',
+//        '/store/top-free/games/xbox'
 ];
 
-$gamePageElements = [
+$allGamesPageElements = [
     'fullPage'         => '.context-list-page .m-product-placement-item',
     'titleElement'     => '.c-heading',
     'priceElement'     => '.c-price span[itemprop="price"]',
     'newPriceElement'  => '.price-info .c-price .srv_price span',
     'imageElement'     => '.srv_appHeaderBoxArt > img',
-    'goldElement'      => '.c-price span img',
-    'eaElement'        => '.c-price > span:last',
-    'gamePassElement'  => '.c-price span img',
-    'discountElement'  => '.c-price > s'
+    'discountElement'  => '.c-price s'
 ];
 
-foreach ($countryArray as $someCountry){
+$gamePageElements = [
+    'fullPage' => '.m-product-detail-hero .m-product-detail-hero-product-placement',
+    'realPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > span',
+    'freeRealPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > .price-disclaimer > span'
+];
 
-    $sitePagesReady = Parsing::getGeneralUrls($someCountry, $sitePage);
+foreach ($countryArray as $countryID) {
+
+    $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
 
     $firstDataParsing = new Parsing();
-    $allGamesData = $firstDataParsing->formationParsingData($sitePagesReady, $gamePageElements);
+    $firstDataParsing->formationParsingData($parsingUrls, $allGamesPageElements);
 
-    echo '<pre>';
-    var_dump($allGamesData);
-    echo '</pre>';
+    $firstDataParsing->parsingSomeGames($gamePageElements, 10);
 
+    $firstDataParsing->varDump();
     $firstDataParsing->clearParcingData();
-
 }
 
-
-
-//$firstDataParsing->addParsingDataDB();
-
-
-
-//$result = (new MultiCurl($urls))->getData();
-//echo $result[0];
-
-
+echo '<br>';
 printf('Скрипт выполнялся %.4F сек.', (microtime(true) - $start));

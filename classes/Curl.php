@@ -18,8 +18,8 @@ class Curl{
 
         $page = curl_exec($this->ch);
 
-        $info = curl_getinfo($this->ch);
-        echo "<br><br> Прошло {$info['total_time']} секунд во время запроса к {$info['url']} <br><br>";
+//        $info = curl_getinfo($this->ch);
+//        echo "<br><br> Прошло {$info['total_time']} секунд во время запроса к {$info['url']} <br><br>";
 
         curl_close($this->ch);
 

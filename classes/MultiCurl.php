@@ -40,8 +40,8 @@ class MultiCurl{
             } while ($mrc == CURLM_CALL_MULTI_PERFORM);
         }
 
-        foreach ($this->channels as $channel) {
-            $this->resultContent[] = curl_multi_getcontent($channel);
+        foreach ($this->channels as $url => $channel) {
+            $this->resultContent[$url] = curl_multi_getcontent($channel);
             curl_multi_remove_handle($this->multi, $channel);
         }
 
