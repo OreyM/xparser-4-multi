@@ -8,7 +8,8 @@ class Parsing{
     private static
         $parsingUrls = array(),
         $gamesData = array(),
-        $gamesUrlsForParsing = array();
+        $gamesUrlsForParsing = array(),
+        $imagesUrls = array();
 
     private
         $nextPageArray = array();
@@ -47,7 +48,7 @@ class Parsing{
         return $discountType;
     }
 
-    public function formationParsingData(array $parsingUrls, array $pageElement){
+    public function formationParsingData(array $parsingUrls, array $pageElement, $parsNextPage = False){
 
         #Очищаем массив полученых ссылок на следующий парсинг
         $this->nextPageArray = array();
@@ -76,6 +77,9 @@ class Parsing{
                     $productBeforeDiscountPrice = trim($parsingData->find($pageElement['discountElement'])->text());
                     $discountType = $this->discountType($parsingData, $productPrice, $productBeforeDiscountPrice);
 
+                    if($productPrice === $discountType)
+                        $discountType = 'Discount';
+
                     #Вносим полученные данные в массив
                     $productArray = [
                         'game_id'       => $productID,
@@ -92,13 +96,10 @@ class Parsing{
                     if($productArray['game_price'] === 'Free'){
                         self::$gamesUrlsForParsing[] = $productLink;
                     }
-//                    $filename = '../images/game_img/'.$productID.'.jpg';
-//                    if (!file_exists($filename)){
-//                        $gamesUrlsForParsing[$productID] = [
-//                            'gameLink' => $productLink,
-//                            'imageCheck' => TRUE
-//                        ];
-//                    }
+                    $filename = 'images/game_img/'.$productID.'.jpg';
+                    if (!file_exists($filename)){
+                        self::$imagesUrls[] = $productLink;
+                    }
                 }
             }
 
@@ -112,8 +113,10 @@ class Parsing{
             }
         }
         #Если полученный массив ссылок не пустой, рекурсируем метод
-        if(!empty($this->nextPageArray)){
-//            $this->formationParsingData($this->nextPageArray, $pageElement);
+        if($parsNextPage){
+            if(!empty($this->nextPageArray)){
+                $this->formationParsingData($this->nextPageArray, $pageElement, TRUE);
+            }
         }
     }
 
@@ -127,8 +130,6 @@ class Parsing{
     # 'someGameUrl' => $gamesUrlsForParsing
     # ];
     public function parsingSomeGames(array $gamePageElements, $iterations){
-
-        $count = 0;
 
         for($i = 0; $i < $iterations; ++$i){
             if(!empty(self::$gamesUrlsForParsing))
@@ -154,6 +155,7 @@ class Parsing{
                 }
 
                 self::$gamesData[$gameID]['before_discount'] = $productPrice;
+
             }
         }
 
@@ -161,6 +163,113 @@ class Parsing{
             $this->parsingSomeGames($gamePageElements, $iterations);
 
 //        return self::$gamesData;
+    }
+
+    public function getImages(array $gamePageElements, $iterations){
+
+        for($i = 0; $i < $iterations; ++$i){
+            if(!empty(self::$imagesUrls))
+                $curlUrls[] = array_shift(self::$imagesUrls);
+            else
+                break;
+        }
+
+        $curlData = (new MultiCurl($curlUrls))->getData();
+
+        foreach ($curlData as $url => $somePage){
+            $elementParsing = phpQuery::newDocument($somePage);
+            $gameID = substr($url, -12);
+
+            foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+
+                $parsingData = pq($parsingData);
+
+                $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+                if(substr($imgElement, 0, 6) != 'https:')
+                    $imgElement = 'https:' . $imgElement;
+//                $testImgElement = substr($imgElement, -3);
+
+//                if($testImgElement === 'jpg'){
+                    $path = 'images/game_new_img/'.$gameID.'.jpg';
+                    file_put_contents($path, file_get_contents($imgElement));
+                    echo "
+                        <div class='container'>
+                            <div class=\"alert alert-success\" role=\"alert\">
+                                A new image for 
+                                <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong> 
+                                ---- Game ID - 
+                                <strong>{$gameID}</strong> 
+                                ---- 
+                                <a href='{$url}'>Game Link</a>
+                            </div>
+                        </div>
+                    ";
+//                }
+//                else{
+//                    echo "
+//                        <div class='container'>
+//                            <div class=\"alert alert-danger\" role=\"alert\">
+//                                WARNING! Can't get a image!
+//                                <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong>
+//                                ---- Game ID -
+//                                <strong>{$gameID}</strong>
+//                                ----
+//                                <a href='{$url}'>Game Link</a>
+//                            </div>
+//                        </div>
+//                    ";
+//                }
+
+            }
+        }
+
+        if(!empty(self::$imagesUrls))
+            $this->getImages($gamePageElements, $iterations);
+
+    }
+
+    public function oneGame($url, array $gamePageElements){
+
+        $gameID = substr($url, -12);
+
+
+        $curlData = (new Curl($url))->getCurlData();
+
+            #Преобразуем полученные данные в ДОМ-структуру
+            $elementParsing = phpQuery::newDocument($curlData);
+
+            foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+
+                $parsingData = pq($parsingData);
+
+
+                $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+
+                if(substr($imgElement, 0, 6) != 'https:')
+                    $imgElement = 'https:' . $imgElement;
+
+                $testImgElement = substr($imgElement, -3);
+
+                $filename = 'images/game_img/'.$gameID.'.jpg';
+                if (!file_exists($filename)){
+                    $path = 'images/game_new_img/'.$gameID.'.jpg';
+                    file_put_contents($path, file_get_contents($imgElement));
+                }
+
+
+
+//                echo $imgElement . '<br>';
+//                echo $testImgElement . '<br>';
+
+            }
+
+
+    }
+
+    public function varDump(){
+        echo '<pre>';
+        var_dump(self::$imagesUrls);
+        echo '</pre>';
     }
 
     public function getGamesData(array $gamePageElements, $count){
@@ -208,55 +317,10 @@ class Parsing{
 
     }
 
-    public function someGameParsing($url, array $gamePageElements){
-        $curlData = (new Curl($url))->getCurlData();
-
-            #Преобразуем полученные данные в ДОМ-структуру
-            $elementParsing = phpQuery::newDocument($curlData);
-
-            foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
-
-                $parsingData = pq($parsingData);
-
-                $gameRealPrice = $parsingData->find($gamePageElements['realPriceElement'])->text();
-                $gameDiscountPrice = $parsingData->find($gamePageElements['discountPriceElement'])->text();
-                $gameDiscountType = $parsingData->find($gamePageElements['discountTypeElement'])->text();
-
-                $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
-                $testImgElement = substr($imgElement, -3);
-
-                echo $gameRealPrice . '<br>';
-                echo $gameDiscountPrice . '<br>';
-                echo $gameDiscountType . '<br>';
-                echo $imgElement . '<br>';
-                echo $testImgElement . '<br>';
-
-//                $gameTitle = $parsingData->find($pageElement['titleElement'])->text();
-//                $gamePublisher = $parsingData->find($pageElement['publisherElement'])->text();
-//                $gameRealPrice = $parsingData->find($pageElement['realPriceElement'])->text();
-//
-//                $gameDiscountPrice = $parsingData->find($pageElement['discountPriceElement'])->text();
-//                $gameDiscountType = $parsingData->find($pageElement['discountTypeElement'])->text();
-//
-//                echo $gameTitle . '<br>';
-//                echo $gamePublisher . '<br>';
-//                echo $gameRealPrice . '<br>';
-//                echo $gameDiscountPrice . '<br>';
-//                echo $gameDiscountType . '<br>';
-            }
-
-
-    }
-
-    public function varDump(){
-        echo '<pre>';
-        var_dump(self::$gamesData);
-        echo '</pre>';
-    }
-
     public function clearParcingData(){
         self::$parsingUrls = array();
         $this->nextPageArray = array();
         self::$gamesData = array();
+        self::$imagesUrls = array();
     }
 }

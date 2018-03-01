@@ -36,8 +36,8 @@ $countryArray = [
 ];
 
 $sitePage = [
-        '/store/top-paid/games/xbox',
-//        '/store/best-rated/games/xbox',
+//        '/store/top-paid/games/xbox',
+        '/store/best-rated/games/xbox',
 //        '/store/new/games/xbox',
 //        '/store/top-free/games/xbox'
 ];
@@ -62,13 +62,21 @@ foreach ($countryArray as $countryID) {
     $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
 
     $firstDataParsing = new Parsing();
-    $firstDataParsing->formationParsingData($parsingUrls, $allGamesPageElements);
+    #TRUE - pars next page, FALSE - not pars next page
+    $firstDataParsing->formationParsingData($parsingUrls, $allGamesPageElements, FALSE);
 
-    $firstDataParsing->parsingSomeGames($gamePageElements, 10);
+//    $firstDataParsing->parsingSomeGames($gamePageElements, 10);
+
+    $firstDataParsing->getImages($gamePageElements, 20);
 
     $firstDataParsing->varDump();
     $firstDataParsing->clearParcingData();
 }
+
+$someGame = new Parsing();
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/voodoo-vince-remastered/9nblggh42xc3', $gamePageElements);
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/fifa-18/bwpkgqv97n7n', $gamePageElements);
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/minecraft-for-windows-10-mobile/9wzdncrdzsbb', $gamePageElements);
 
 echo '<br>';
 printf('Скрипт выполнялся %.4F сек.', (microtime(true) - $start));

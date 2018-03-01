@@ -1,4 +1,40 @@
 <?php
+
+public function oneGame($url, array $gamePageElements){
+
+    $gameID = substr($url, -12);
+
+
+    $curlData = (new Curl($url))->getCurlData();
+
+    #Преобразуем полученные данные в ДОМ-структуру
+    $elementParsing = phpQuery::newDocument($curlData);
+
+    foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+
+        $parsingData = pq($parsingData);
+
+
+        $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+        $testImgElement = substr($imgElement, -3);
+
+        $filename = 'images/game_img/'.$gameID.'.jpg';
+        if (!file_exists($filename)){
+            $path = 'images/game_new_img/'.$gameID.'.jpg';
+            file_put_contents($path, file_get_contents($imgElement));
+        }
+
+
+
+//                echo $imgElement . '<br>';
+//                echo $testImgElement . '<br>';
+
+    }
+
+
+}
+
+
 public function getGamesData(array $gamePageElements, $count){
 
     $iteration = 0;
@@ -44,7 +80,45 @@ public function getGamesData(array $gamePageElements, $count){
 
 }
 
+public function someGameParsing($url, array $gamePageElements){
+    $curlData = (new Curl($url))->getCurlData();
 
+    #Преобразуем полученные данные в ДОМ-структуру
+    $elementParsing = phpQuery::newDocument($curlData);
+
+    foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+
+        $parsingData = pq($parsingData);
+
+        $gameRealPrice = $parsingData->find($gamePageElements['realPriceElement'])->text();
+        $gameDiscountPrice = $parsingData->find($gamePageElements['discountPriceElement'])->text();
+        $gameDiscountType = $parsingData->find($gamePageElements['discountTypeElement'])->text();
+
+        $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+        $testImgElement = substr($imgElement, -3);
+
+        echo $gameRealPrice . '<br>';
+        echo $gameDiscountPrice . '<br>';
+        echo $gameDiscountType . '<br>';
+        echo $imgElement . '<br>';
+        echo $testImgElement . '<br>';
+
+//                $gameTitle = $parsingData->find($pageElement['titleElement'])->text();
+//                $gamePublisher = $parsingData->find($pageElement['publisherElement'])->text();
+//                $gameRealPrice = $parsingData->find($pageElement['realPriceElement'])->text();
+//
+//                $gameDiscountPrice = $parsingData->find($pageElement['discountPriceElement'])->text();
+//                $gameDiscountType = $parsingData->find($pageElement['discountTypeElement'])->text();
+//
+//                echo $gameTitle . '<br>';
+//                echo $gamePublisher . '<br>';
+//                echo $gameRealPrice . '<br>';
+//                echo $gameDiscountPrice . '<br>';
+//                echo $gameDiscountType . '<br>';
+    }
+
+
+}
 
 public function formationParsingData(array $parsingUrls, array $pageElement, array $gamePageElements){
 
