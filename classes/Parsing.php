@@ -2,6 +2,7 @@
 require_once 'phpQuery/phpQuery.php';
 require_once 'MultiCurl.php';
 require_once 'Curl.php';
+require_once 'Database.php';
 
 class Parsing{
 
@@ -61,12 +62,16 @@ class Parsing{
             #Преобразуем полученные данные в ДОМ-структуру
             $elementParsing = phpQuery::newDocument($somePage);
 
+            //echo $elementParsing;
+
             #Перебераем ДОМ-элементы
             foreach ($elementParsing->find($pageElement['fullPage']) as $parsingData) {
 
                 $parsingData = pq($parsingData);
 
                 $productLink = GAME_URL . ($parsingData->find('> a')->attr('href'));
+                if(substr($productLink, -5) == 'chart')
+                    $productLink = str_replace('?cid=msft_web_chart', '', $productLink);
                 $productID = substr($productLink, -12);
 
                 #Проверка для исключения дублирования внесения данных в массив игр
@@ -138,29 +143,34 @@ class Parsing{
                 break;
         }
 
-        $curlData = (new MultiCurl($curlUrls))->getData();
+        if(!is_null($curlUrls)){
 
-        foreach ($curlData as $url => $somePage){
-            $elementParsing = phpQuery::newDocument($somePage);
-            $gameID = substr($url, -12);
+            $curlData = (new MultiCurl($curlUrls))->getData();
 
-            foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+            foreach ($curlData as $url => $somePage){
+                $elementParsing = phpQuery::newDocument($somePage);
+                $gameID = substr($url, -12);
 
-                $parsingData = pq($parsingData);
-                $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
-                $productPrice = trim($parsingData->find($gamePageElements['freeRealPrice'])->text());
-                if(empty($productPrice)){
+                foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+
+                    $parsingData = pq($parsingData);
                     $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
-                    $productPrice = trim($parsingData->find($gamePageElements['realPrice'])->text());
+                    $productPrice = trim($parsingData->find($gamePageElements['freeRealPrice'])->text());
+                    if(empty($productPrice)){
+                        $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
+                        $productPrice = trim($parsingData->find($gamePageElements['realPrice'])->text());
+                    }
+
+                    self::$gamesData[$gameID]['before_discount'] = $productPrice;
+
                 }
-
-                self::$gamesData[$gameID]['before_discount'] = $productPrice;
-
             }
+
+            if(!empty(self::$gamesUrlsForParsing))
+                $this->parsingSomeGames($gamePageElements, $iterations);
         }
 
-        if(!empty(self::$gamesUrlsForParsing))
-            $this->parsingSomeGames($gamePageElements, $iterations);
+
 
 //        return self::$gamesData;
     }
@@ -187,39 +197,21 @@ class Parsing{
                 $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
                 if(substr($imgElement, 0, 6) != 'https:')
                     $imgElement = 'https:' . $imgElement;
-//                $testImgElement = substr($imgElement, -3);
 
-//                if($testImgElement === 'jpg'){
-                    $path = 'images/game_new_img/'.$gameID.'.jpg';
-                    file_put_contents($path, file_get_contents($imgElement));
-                    echo "
-                        <div class='container'>
-                            <div class=\"alert alert-success\" role=\"alert\">
-                                A new image for 
-                                <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong> 
-                                ---- Game ID - 
-                                <strong>{$gameID}</strong> 
-                                ---- 
-                                <a href='{$url}'>Game Link</a>
-                            </div>
+                $path = 'images/game_new_img/'.$gameID.'.jpg';
+                file_put_contents($path, file_get_contents($imgElement));
+                echo "
+                    <div class='container'>
+                        <div class=\"alert alert-success\" role=\"alert\">
+                            A new image for 
+                            <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong> 
+                            ---- Game ID - 
+                            <strong>{$gameID}</strong> 
+                            ---- 
+                            <a href='{$url}'>Game Link</a>
                         </div>
-                    ";
-//                }
-//                else{
-//                    echo "
-//                        <div class='container'>
-//                            <div class=\"alert alert-danger\" role=\"alert\">
-//                                WARNING! Can't get a image!
-//                                <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong>
-//                                ---- Game ID -
-//                                <strong>{$gameID}</strong>
-//                                ----
-//                                <a href='{$url}'>Game Link</a>
-//                            </div>
-//                        </div>
-//                    ";
-//                }
-
+                    </div>
+                ";
             }
         }
 
@@ -255,67 +247,63 @@ class Parsing{
                     $path = 'images/game_new_img/'.$gameID.'.jpg';
                     file_put_contents($path, file_get_contents($imgElement));
                 }
-
-
-
 //                echo $imgElement . '<br>';
 //                echo $testImgElement . '<br>';
-
             }
 
 
+    }
+
+    public function transformPrice($counrtyIdentification) {
+
+        foreach (self::$gamesData as $gameID => $dataArray){
+
+//            echo $dataArray['game_price'] . ' ----- ' . ['before_discount'] . '<br>';
+
+            if(!empty($dataArray['game_price']) && $dataArray['game_price'] !== 'Free'){
+                $dataArray['game_price'] = htmlentities($dataArray['game_price']);
+                $dataArray['game_price'] = preg_replace('/[^0-9,.]/', '', $dataArray['game_price']);
+                if($counrtyIdentification === 'rus_ru_ru')
+                    $dataArray['game_price'] = str_replace(',', '.', $dataArray['game_price']);
+                self::$gamesData[$gameID]['game_price'] = (float)$dataArray['game_price'];
+            }
+
+            if(!empty($dataArray['before_discount']) && $dataArray['before_discount'] !== 'Free'){
+                $dataArray['before_discount'] = htmlentities($dataArray['before_discount']);
+                $dataArray['before_discount'] = preg_replace('/[^0-9,.]/', '', $dataArray['before_discount']);
+                if($counrtyIdentification === 'rus_ru_ru')
+                    $dataArray['game_price'] = str_replace(',', '.', $dataArray['game_price']);
+                self::$gamesData[$gameID]['before_discount']  = (float)$dataArray['before_discount'];
+            }
+
+//            echo $dataArray['game_price'] . ' ----- ' . ['before_discount'] . '<br>';
+        }
+
+    }
+
+    public function addDataDB($table){
+        $Database = Database::checkConnect();
+        $sql = $Database->connectDatabase();
+
+        $Database->truncateTable($sql, $table);
+
+        foreach (self::$gamesData as $toDBData) {
+
+            $Database->insertData($sql, $table, $toDBData);
+
+        }
+
+
+        $sql->close();
     }
 
     public function varDump(){
         echo '<pre>';
-        var_dump(self::$imagesUrls);
+        var_dump(self::$gamesData);
         echo '</pre>';
     }
 
-    public function getGamesData(array $gamePageElements, $count){
 
-        $iteration = 0;
-
-        foreach (self::$gamesUrls as $gamesID => $gameUrl) {
-
-            if($iteration === $count)
-                break;
-            else{
-
-                $curlData = (new MultiCurl(self::$gamesUrls))->getData();
-
-                foreach ($curlData as $somePage){
-
-                    #Преобразуем полученные данные в ДОМ-структуру
-                    $elementParsing = phpQuery::newDocument($somePage);
-
-                    #Перебераем ДОМ-элементы
-                    foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
-                        $parsingData = pq($parsingData);
-
-                        $gameTitle = $parsingData->find($gamePageElements['titleElement'])->text();
-                        $gamePublisher = $parsingData->find($gamePageElements['publisherElement'])->text();
-                        $gameRealPrice = $parsingData->find($gamePageElements['realPriceElement'])->text();
-
-                        $gameDiscountPrice = $parsingData->find($gamePageElements['discountPriceElement'])->text();
-                        $gameDiscountType = $parsingData->find($gamePageElements['discountTypeElement'])->text();
-
-                        echo "$gameTitle $gamePublisher $gameRealPrice $gameDiscountPrice $gameDiscountType <br>";
-                    }
-
-                }
-
-                unset(self::$gamesUrls[$gamesID]);
-                ++$iteration;
-            }
-        }
-
-        echo count(self::$gamesUrls) . '<br>';
-
-        if(!empty(self::$gamesUrls))
-            $this->getGamesData($count);
-
-    }
 
     public function clearParcingData(){
         self::$parsingUrls = array();

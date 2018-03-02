@@ -6,14 +6,14 @@ class Database{
     private function __clone(){/* ... @return Singleton */ }
     private function __wakeup(){/* ... @return Singleton */ }
 
-    public static function checkConnectionDatabase(){
-        return !(isset(self::$connectionStatus)) ? self::$connectionStatus = new DatabaseConnect : self::$connectionStatus;
-    }
-
     private static function errorDataBase(mysqli $object){
         var_dump($object);
         echo "Request failed! Error: {$object->error}. Error number: <strong>{$object->errno}</strong>";
         exit();
+    }
+
+    public static function checkConnect(){
+        return !(isset(self::$connectionStatus)) ? self::$connectionStatus = new Database : self::$connectionStatus;
     }
 
     public function connectDatabase(){

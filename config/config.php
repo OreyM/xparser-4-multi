@@ -7,11 +7,9 @@ ini_set('max_execution_time', '320000');
 
 //DATA to connect to Local DataBase
 define(HOST, 'localhost');
-define(DATABASE, 'ms_xbox');
+define(DATABASE, 'parser');
 define(USERNAME, 'root');
 define(PASSWORD, '');
-//Table for parsing data
-define(TABLE, 'or_parcing');
 
 //URL DEFINE
 define(GAME_URL, 'https://www.microsoft.com');

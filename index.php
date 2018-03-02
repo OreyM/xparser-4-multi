@@ -5,8 +5,8 @@ require_once 'classes/Parsing.php';
 
 
 $countryArray = [
-    'USA' => '/en-us',
-//    'RUS' => '/ru-ru',
+    'usa_en_us' => '/en-us',
+//    'rus_ru_ru' => '/ru-ru',
 //    'EVRO'  => '/de-de',
 //    'Argentina' => '/es-ar',
 //    'Brazil' => '/pt-br',
@@ -36,8 +36,8 @@ $countryArray = [
 ];
 
 $sitePage = [
-//        '/store/top-paid/games/xbox',
-        '/store/best-rated/games/xbox',
+        '/store/top-paid/games/xbox',
+//        '/store/best-rated/games/xbox',
 //        '/store/new/games/xbox',
 //        '/store/top-free/games/xbox'
 ];
@@ -57,23 +57,23 @@ $gamePageElements = [
     'freeRealPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > .price-disclaimer > span'
 ];
 
-foreach ($countryArray as $countryID) {
+foreach ($countryArray as $tableName => $countryID) {
 
     $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
 
     $firstDataParsing = new Parsing();
     #TRUE - pars next page, FALSE - not pars next page
     $firstDataParsing->formationParsingData($parsingUrls, $allGamesPageElements, FALSE);
-
-//    $firstDataParsing->parsingSomeGames($gamePageElements, 10);
-
-    $firstDataParsing->getImages($gamePageElements, 20);
+    $firstDataParsing->parsingSomeGames($gamePageElements, 25);
+    $firstDataParsing->transformPrice($tableName);
+//    $firstDataParsing->getImages($gamePageElements, 10);
+//    $firstDataParsing->addDataDB($tableName);
 
     $firstDataParsing->varDump();
     $firstDataParsing->clearParcingData();
 }
 
-$someGame = new Parsing();
+//$someGame = new Parsing();
 //$someGame->oneGame('https://www.microsoft.com/en-us/store/p/voodoo-vince-remastered/9nblggh42xc3', $gamePageElements);
 //$someGame->oneGame('https://www.microsoft.com/en-us/store/p/fifa-18/bwpkgqv97n7n', $gamePageElements);
 //$someGame->oneGame('https://www.microsoft.com/en-us/store/p/minecraft-for-windows-10-mobile/9wzdncrdzsbb', $gamePageElements);

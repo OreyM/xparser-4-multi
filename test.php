@@ -13,7 +13,7 @@ public function oneGame($url, array $gamePageElements){
     foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
 
         $parsingData = pq($parsingData);
-
+        echo count(self::$imagesUrls) . '<br>';
 
         $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
         $testImgElement = substr($imgElement, -3);

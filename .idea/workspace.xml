@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/classes/Parsing.php" description="//                $filename = '../images/game_img/..." line="252" />
+    <bookmark url="file://$PROJECT_DIR$/classes/Parsing.php" description="//                $filename = '../images/game_img/..." line="244" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a94b411a-8a82-48b6-bb69-abfbd39e78ed" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/Database.php" afterPath="$PROJECT_DIR$/classes/Database.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/Parsing.php" afterPath="$PROJECT_DIR$/classes/Parsing.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/config.php" afterPath="$PROJECT_DIR$/config/config.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.php" afterPath="$PROJECT_DIR$/test.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,43 +24,47 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="69" column="54" lean-forward="false" selection-start-line="69" selection-start-column="54" selection-end-line="69" selection-end-column="54" />
-              <folding>
-                <element signature="e#120#905#0#PHP" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="4" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+            <state relative-caret-position="57">
+              <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Parsing.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Parsing.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="226" column="28" lean-forward="false" selection-start-line="226" selection-start-column="28" selection-end-line="226" selection-end-column="28" />
+            <state relative-caret-position="2097">
+              <caret line="136" column="75" lean-forward="false" selection-start-line="136" selection-start-column="75" selection-end-line="136" selection-end-column="75" />
               <folding>
                 <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
-                <element signature="n#discountType#0;n#Parsing#0;n#!!top" expanded="false" />
-                <element signature="n#formationParsingData#0;n#Parsing#0;n#!!top" expanded="false" />
-                <element signature="e#4662#4713#0#PHP" expanded="false" />
-                <element signature="e#4814#4834#0#PHP" expanded="false" />
-                <element signature="e#7987#8006#0#PHP" expanded="false" />
-                <element signature="n#getGamesData#0;n#Parsing#0;n#!!top" expanded="false" />
-                <marker date="1519916468244" expanded="true" signature="7462:7962" ph="..." />
-                <marker date="1519916468244" expanded="true" signature="7541:7631" ph="..." />
-                <marker date="1519916468244" expanded="true" signature="7541:7931" ph="..." />
-                <marker date="1519916468244" expanded="true" signature="8108:8632" ph="..." />
-                <marker date="1519916468244" expanded="true" signature="8188:8599" ph="..." />
+                <element signature="e#4873#4924#0#PHP" expanded="false" />
+                <element signature="e#5025#5045#0#PHP" expanded="false" />
+                <element signature="n#parsingSomeGames#0;n#Parsing#0;n#!!top" expanded="false" />
+                <element signature="n#oneGame#0;n#Parsing#0;n#!!top" expanded="false" />
+                <marker date="1519986430038" expanded="true" signature="7661:8125" ph="..." />
+                <marker date="1519986430038" expanded="true" signature="7736:7818" ph="..." />
+                <marker date="1519986430038" expanded="true" signature="7736:8098" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Database.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classes/Database.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="400">
+              <caret line="56" column="30" lean-forward="false" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="30" />
+              <folding>
+                <element signature="n#errorDataBase#0;n#Database#0;n#!!top" expanded="false" />
+                <element signature="n#truncateTable#0;n#Database#0;n#!!top" expanded="false" />
+                <element signature="n#queryParameters#0;n#Database#0;n#!!top" expanded="false" />
+                <element signature="n#selectData#0;n#Database#0;n#!!top" expanded="false" />
+                <element signature="n#insertData#0;n#Database#0;n#!!top" expanded="false" />
+                <element signature="n#updateData#0;n#Database#0;n#!!top" expanded="false" />
+                <marker date="1519982403948" expanded="true" signature="1569:1583" ph="SELECT * FRO... $" />
+                <marker date="1519982403948" expanded="true" signature="1833:1858" ph="INSERT INTO $... " />
+                <marker date="1519982403948" expanded="true" signature="2097:2155" ph="UPDATE ${{$t... " />
               </folding>
             </state>
           </provider>
@@ -64,8 +73,8 @@
       <file leaf-file-name="test.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="17" column="8" lean-forward="false" selection-start-line="17" selection-start-column="8" selection-end-line="18" selection-end-column="50" />
+            <state relative-caret-position="171">
+              <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -81,21 +90,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Curl.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/classes/Curl.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="config.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="16" column="43" lean-forward="false" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+            <state relative-caret-position="228">
+              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -121,16 +120,16 @@
         <option value="$PROJECT_DIR$/lib/Curl.php" />
         <option value="$PROJECT_DIR$/_index.php" />
         <option value="$PROJECT_DIR$/lib/MultiCurl.php" />
-        <option value="$PROJECT_DIR$/classes/Database.php" />
         <option value="$PROJECT_DIR$/examluReal.php" />
         <option value="$PROJECT_DIR$/test" />
-        <option value="$PROJECT_DIR$/config/config.php" />
         <option value="$PROJECT_DIR$/classes/Curl.php" />
         <option value="$PROJECT_DIR$/classes/MultiCurl.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/test.php" />
+        <option value="$PROJECT_DIR$/config/config.php" />
+        <option value="$PROJECT_DIR$/classes/Database.php" />
         <option value="$PROJECT_DIR$/classes/Parsing.php" />
         <option value="$PROJECT_DIR$/index.php" />
-        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -171,6 +170,11 @@
               <item name="newparser.loc" type="b2602c69:ProjectViewProjectNode" />
               <item name="newparser.loc" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
+            <path>
+              <item name="newparser.loc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="newparser.loc" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="classes" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -209,15 +213,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1519303345937</updated>
-      <workItem from="1519303348607" duration="98593000" />
+      <workItem from="1519303348607" duration="108276000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="98593000" />
+    <option name="totallyTimeSpent" value="108276000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -225,8 +230,8 @@
       <window_info id="Event Log" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6187399" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13398941" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6187399" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13398941" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -261,30 +266,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/Database.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="14" lean-forward="false" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="14" />
-          <folding>
-            <marker date="1519310474902" expanded="true" signature="1587:1601" ph="SELECT * FRO... $" />
-            <marker date="1519310474902" expanded="true" signature="1851:1876" ph="INSERT INTO $... " />
-            <marker date="1519310474902" expanded="true" signature="2115:2173" ph="UPDATE ${{$t... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examluReal.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="399">
           <caret line="41" column="6" lean-forward="false" selection-start-line="41" selection-start-column="6" selection-end-line="41" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="16" column="43" lean-forward="false" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -297,14 +282,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="17" column="8" lean-forward="false" selection-start-line="17" selection-start-column="8" selection-end-line="18" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/MultiCurl.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
@@ -313,42 +290,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="226" column="28" lean-forward="false" selection-start-line="226" selection-start-column="28" selection-end-line="226" selection-end-column="28" />
+        <state relative-caret-position="19">
+          <caret line="1" column="4" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/Database.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="56" column="30" lean-forward="false" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="30" />
           <folding>
-            <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
-            <element signature="n#discountType#0;n#Parsing#0;n#!!top" expanded="false" />
-            <element signature="n#formationParsingData#0;n#Parsing#0;n#!!top" expanded="false" />
-            <element signature="e#4662#4713#0#PHP" expanded="false" />
-            <element signature="e#4814#4834#0#PHP" expanded="false" />
-            <element signature="e#7987#8006#0#PHP" expanded="false" />
-            <element signature="n#getGamesData#0;n#Parsing#0;n#!!top" expanded="false" />
-            <marker date="1519916468244" expanded="true" signature="7462:7962" ph="..." />
-            <marker date="1519916468244" expanded="true" signature="7541:7631" ph="..." />
-            <marker date="1519916468244" expanded="true" signature="7541:7931" ph="..." />
-            <marker date="1519916468244" expanded="true" signature="8108:8632" ph="..." />
-            <marker date="1519916468244" expanded="true" signature="8188:8599" ph="..." />
+            <element signature="n#errorDataBase#0;n#Database#0;n#!!top" expanded="false" />
+            <element signature="n#truncateTable#0;n#Database#0;n#!!top" expanded="false" />
+            <element signature="n#queryParameters#0;n#Database#0;n#!!top" expanded="false" />
+            <element signature="n#selectData#0;n#Database#0;n#!!top" expanded="false" />
+            <element signature="n#insertData#0;n#Database#0;n#!!top" expanded="false" />
+            <element signature="n#updateData#0;n#Database#0;n#!!top" expanded="false" />
+            <marker date="1519982403948" expanded="true" signature="1569:1583" ph="SELECT * FRO... $" />
+            <marker date="1519982403948" expanded="true" signature="1833:1858" ph="INSERT INTO $... " />
+            <marker date="1519982403948" expanded="true" signature="2097:2155" ph="UPDATE ${{$t... " />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="69" column="54" lean-forward="false" selection-start-line="69" selection-start-column="54" selection-end-line="69" selection-end-column="54" />
-          <folding>
-            <element signature="e#120#905#0#PHP" expanded="false" />
-          </folding>
+        <state relative-caret-position="57">
+          <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="4" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
-          <folding />
+        <state relative-caret-position="2097">
+          <caret line="136" column="75" lean-forward="false" selection-start-line="136" selection-start-column="75" selection-end-line="136" selection-end-column="75" />
+          <folding>
+            <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
+            <element signature="e#4873#4924#0#PHP" expanded="false" />
+            <element signature="e#5025#5045#0#PHP" expanded="false" />
+            <element signature="n#parsingSomeGames#0;n#Parsing#0;n#!!top" expanded="false" />
+            <element signature="n#oneGame#0;n#Parsing#0;n#!!top" expanded="false" />
+            <marker date="1519986430038" expanded="true" signature="7661:8125" ph="..." />
+            <marker date="1519986430038" expanded="true" signature="7736:7818" ph="..." />
+            <marker date="1519986430038" expanded="true" signature="7736:8098" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
