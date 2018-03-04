@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/classes/Parsing.php" description="//                $filename = '../images/game_img/..." line="244" />
+    <bookmark url="file://$PROJECT_DIR$/classes/Parsing.php" description="//                $filename = '../images/game_img/..." line="277" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a94b411a-8a82-48b6-bb69-abfbd39e78ed" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/classes/GenerateData.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/main.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/Database.php" afterPath="$PROJECT_DIR$/classes/Database.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/Parsing.php" afterPath="$PROJECT_DIR$/classes/Parsing.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/config.php" afterPath="$PROJECT_DIR$/config/config.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.php" afterPath="$PROJECT_DIR$/test.php" />
     </list>
@@ -21,30 +22,44 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+            <state relative-caret-position="-703">
+              <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Parsing.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Parsing.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2097">
-              <caret line="136" column="75" lean-forward="false" selection-start-line="136" selection-start-column="75" selection-end-line="136" selection-end-column="75" />
+            <state relative-caret-position="341">
+              <caret line="167" column="151" lean-forward="false" selection-start-line="167" selection-start-column="151" selection-end-line="167" selection-end-column="151" />
               <folding>
                 <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
-                <element signature="e#4873#4924#0#PHP" expanded="false" />
-                <element signature="e#5025#5045#0#PHP" expanded="false" />
-                <element signature="n#parsingSomeGames#0;n#Parsing#0;n#!!top" expanded="false" />
-                <element signature="n#oneGame#0;n#Parsing#0;n#!!top" expanded="false" />
-                <marker date="1519986430038" expanded="true" signature="7661:8125" ph="..." />
-                <marker date="1519986430038" expanded="true" signature="7736:7818" ph="..." />
-                <marker date="1519986430038" expanded="true" signature="7736:8098" ph="..." />
+                <element signature="e#5495#5546#0#PHP" expanded="false" />
+                <element signature="e#5647#5667#0#PHP" expanded="false" />
+                <element signature="n#getImages#0;n#Parsing#0;n#!!top" expanded="false" />
+                <element signature="e#10041#10131#0#PHP" expanded="false" />
+                <element signature="e#11188#11252#0#PHP" expanded="false" />
+                <element signature="n#addDataDB#0;n#Parsing#0;n#!!top" expanded="false" />
+                <marker date="1520175005611" expanded="true" signature="8614:9078" ph="..." />
+                <marker date="1520175005611" expanded="true" signature="8689:8771" ph="..." />
+                <marker date="1520175005611" expanded="true" signature="8689:9051" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GenerateData.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classes/GenerateData.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="646">
+              <caret line="81" column="91" lean-forward="false" selection-start-line="81" selection-start-column="91" selection-end-line="81" selection-end-column="91" />
+              <folding>
+                <element signature="n#checkMissGames_General#0;n#GenerateData#0;n#!!top" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -53,18 +68,18 @@
       <file leaf-file-name="Database.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/Database.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="56" column="30" lean-forward="false" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="30" />
+            <state relative-caret-position="419">
+              <caret line="73" column="85" lean-forward="false" selection-start-line="73" selection-start-column="85" selection-end-line="73" selection-end-column="85" />
               <folding>
                 <element signature="n#errorDataBase#0;n#Database#0;n#!!top" expanded="false" />
                 <element signature="n#truncateTable#0;n#Database#0;n#!!top" expanded="false" />
                 <element signature="n#queryParameters#0;n#Database#0;n#!!top" expanded="false" />
                 <element signature="n#selectData#0;n#Database#0;n#!!top" expanded="false" />
                 <element signature="n#insertData#0;n#Database#0;n#!!top" expanded="false" />
-                <element signature="n#updateData#0;n#Database#0;n#!!top" expanded="false" />
-                <marker date="1519982403948" expanded="true" signature="1569:1583" ph="SELECT * FRO... $" />
-                <marker date="1519982403948" expanded="true" signature="1833:1858" ph="INSERT INTO $... " />
-                <marker date="1519982403948" expanded="true" signature="2097:2155" ph="UPDATE ${{$t... " />
+                <marker date="1520065723856" expanded="true" signature="1569:1583" ph="SELECT * FRO... $" />
+                <marker date="1520065723856" expanded="true" signature="1833:1858" ph="INSERT INTO $... " />
+                <marker date="1520065723856" expanded="true" signature="2097:2155" ph="UPDATE ${{$t... " />
+                <marker date="1520065723856" expanded="true" signature="2341:2563" ph="UPDATE ${{$t... " />
               </folding>
             </state>
           </provider>
@@ -73,9 +88,17 @@
       <file leaf-file-name="test.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-              <folding />
+            <state relative-caret-position="324">
+              <caret line="263" column="16" lean-forward="false" selection-start-line="263" selection-start-column="16" selection-end-line="267" selection-end-column="90" />
+              <folding>
+                <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
+                <element signature="e#4857#4908#0#PHP" expanded="false" />
+                <element signature="e#5009#5029#0#PHP" expanded="false" />
+                <element signature="n#parsingSomeGames#0;n#Parsing#0;n#!!top" expanded="false" />
+                <element signature="n#oneGame#0;n#Parsing#0;n#!!top" expanded="false" />
+                <marker date="1519987756935" expanded="true" signature="7645:8109" ph="..." />
+                <marker date="1519987756935" expanded="true" signature="7720:8082" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -125,9 +148,11 @@
         <option value="$PROJECT_DIR$/classes/Curl.php" />
         <option value="$PROJECT_DIR$/classes/MultiCurl.php" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/test.php" />
         <option value="$PROJECT_DIR$/config/config.php" />
+        <option value="$PROJECT_DIR$/test.php" />
+        <option value="$PROJECT_DIR$/core/main.php" />
         <option value="$PROJECT_DIR$/classes/Database.php" />
+        <option value="$PROJECT_DIR$/classes/GenerateData.php" />
         <option value="$PROJECT_DIR$/classes/Parsing.php" />
         <option value="$PROJECT_DIR$/index.php" />
       </list>
@@ -213,12 +238,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1519303345937</updated>
-      <workItem from="1519303348607" duration="108276000" />
+      <workItem from="1519303348607" duration="131059000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108276000" />
+    <option name="totallyTimeSpent" value="131059000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -253,7 +278,19 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/classes/Database.php</url>
+          <line>25</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/classes/Database.php</url>
+          <line>63</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="11" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -298,14 +335,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/config.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
@@ -314,46 +343,82 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="263" column="16" lean-forward="false" selection-start-line="263" selection-start-column="16" selection-end-line="267" selection-end-column="90" />
+          <folding>
+            <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
+            <element signature="e#4857#4908#0#PHP" expanded="false" />
+            <element signature="e#5009#5029#0#PHP" expanded="false" />
+            <element signature="n#parsingSomeGames#0;n#Parsing#0;n#!!top" expanded="false" />
+            <element signature="n#oneGame#0;n#Parsing#0;n#!!top" expanded="false" />
+            <marker date="1519987756935" expanded="true" signature="7645:8109" ph="..." />
+            <marker date="1519987756935" expanded="true" signature="7720:8082" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/main.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/GenerateData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="81" column="91" lean-forward="false" selection-start-line="81" selection-start-column="91" selection-end-line="81" selection-end-column="91" />
+          <folding>
+            <element signature="n#checkMissGames_General#0;n#GenerateData#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/classes/Database.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="56" column="30" lean-forward="false" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="30" />
+        <state relative-caret-position="419">
+          <caret line="73" column="85" lean-forward="false" selection-start-line="73" selection-start-column="85" selection-end-line="73" selection-end-column="85" />
           <folding>
             <element signature="n#errorDataBase#0;n#Database#0;n#!!top" expanded="false" />
             <element signature="n#truncateTable#0;n#Database#0;n#!!top" expanded="false" />
             <element signature="n#queryParameters#0;n#Database#0;n#!!top" expanded="false" />
             <element signature="n#selectData#0;n#Database#0;n#!!top" expanded="false" />
             <element signature="n#insertData#0;n#Database#0;n#!!top" expanded="false" />
-            <element signature="n#updateData#0;n#Database#0;n#!!top" expanded="false" />
-            <marker date="1519982403948" expanded="true" signature="1569:1583" ph="SELECT * FRO... $" />
-            <marker date="1519982403948" expanded="true" signature="1833:1858" ph="INSERT INTO $... " />
-            <marker date="1519982403948" expanded="true" signature="2097:2155" ph="UPDATE ${{$t... " />
+            <marker date="1520065723856" expanded="true" signature="1569:1583" ph="SELECT * FRO... $" />
+            <marker date="1520065723856" expanded="true" signature="1833:1858" ph="INSERT INTO $... " />
+            <marker date="1520065723856" expanded="true" signature="2097:2155" ph="UPDATE ${{$t... " />
+            <marker date="1520065723856" expanded="true" signature="2341:2563" ph="UPDATE ${{$t... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="167" column="151" lean-forward="false" selection-start-line="167" selection-start-column="151" selection-end-line="167" selection-end-column="151" />
+          <folding>
+            <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
+            <element signature="e#5495#5546#0#PHP" expanded="false" />
+            <element signature="e#5647#5667#0#PHP" expanded="false" />
+            <element signature="n#getImages#0;n#Parsing#0;n#!!top" expanded="false" />
+            <element signature="e#10041#10131#0#PHP" expanded="false" />
+            <element signature="e#11188#11252#0#PHP" expanded="false" />
+            <element signature="n#addDataDB#0;n#Parsing#0;n#!!top" expanded="false" />
+            <marker date="1520175005611" expanded="true" signature="8614:9078" ph="..." />
+            <marker date="1520175005611" expanded="true" signature="8689:8771" ph="..." />
+            <marker date="1520175005611" expanded="true" signature="8689:9051" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        <state relative-caret-position="-703">
+          <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2097">
-          <caret line="136" column="75" lean-forward="false" selection-start-line="136" selection-start-column="75" selection-end-line="136" selection-end-column="75" />
-          <folding>
-            <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
-            <element signature="e#4873#4924#0#PHP" expanded="false" />
-            <element signature="e#5025#5045#0#PHP" expanded="false" />
-            <element signature="n#parsingSomeGames#0;n#Parsing#0;n#!!top" expanded="false" />
-            <element signature="n#oneGame#0;n#Parsing#0;n#!!top" expanded="false" />
-            <marker date="1519986430038" expanded="true" signature="7661:8125" ph="..." />
-            <marker date="1519986430038" expanded="true" signature="7736:7818" ph="..." />
-            <marker date="1519986430038" expanded="true" signature="7736:8098" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>

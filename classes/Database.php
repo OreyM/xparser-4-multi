@@ -67,4 +67,13 @@ class Database{
         if(($query = $db->query("UPDATE {$table} SET {$data} WHERE GAME_ID = '{$searchKey}'")) === FALSE )
             self::errorDataBase($db);
     }
+
+    public function leftJoin(mysqli $db, $table_1, $table_2, $requestData, $select = '*') {
+        if(($query = $db->query("SELECT {$table_2}.$select FROM {$table_2} 
+                                 LEFT JOIN {$table_1} ON ({$table_2}.$requestData = {$table_1}.$requestData)
+                                 WHERE {$table_1}.$requestData IS NULL")) === FALSE )
+            self::errorDataBase($db);
+
+        return $query;
+    }
 }

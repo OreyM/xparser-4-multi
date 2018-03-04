@@ -8,9 +8,11 @@ class Parsing{
 
     private static
         $parsingUrls = array(),
-        $gamesData = array(),
         $gamesUrlsForParsing = array(),
         $imagesUrls = array();
+
+    protected static
+        $gamesData = array();
 
     private
         $nextPageArray = array();
@@ -28,28 +30,41 @@ class Parsing{
             return self::$parsingUrls;
     }
 
-    private function discountType(phpQueryObject $parsingData, $productPrice, $productBeforeDiscountPrice){
+    private function discountType(phpQueryObject $parsingData, $productPrice, $productBeforeDiscountPrice, $countryIdentification){
 
         if($productPrice === 'Free' || !empty($productBeforeDiscountPrice)){
             $discountType = $parsingData->find('.c-price span img')->attr('alt');
             if(empty($discountType)){
                 $discountType = $parsingData->find('.c-price > span:last')->text();
-                if(empty($discountType)){
+                if(empty($discountType))
                     $discountType = 'Discount';
-                }
             }
         } else {
             $discountType = 'NONE';
         }
 
-        if($discountType === 'Discount' && $productPrice === 'Free'){
-            $discountType = 'FreeGame';
-        }
+        $checkDiscount = $this->transformPrice(trim($discountType), $countryIdentification);
+
+        if($productPrice === $checkDiscount)
+            $discountType = 'Discount';
 
         return $discountType;
     }
 
-    public function formationParsingData(array $parsingUrls, array $pageElement, $parsNextPage = False){
+    protected function transformPrice($price, $countryIdentification){
+
+        $price = htmlentities($price);
+        $price = preg_replace('/[^0-9,.]/', '', $price);
+
+        if($countryIdentification === 'rus_ru_ru' || $countryIdentification === 'evro_de_de')
+            $price = str_replace(',', '.', $price);
+
+        $cleanPrice = (float)$price;
+
+        return $cleanPrice;
+    }
+
+    public function formationParsingData(array $parsingUrls, array $pageElement, $countryIdentification, $parsNextPage = False){
 
         #Очищаем массив полученых ссылок на следующий парсинг
         $this->nextPageArray = array();
@@ -78,12 +93,11 @@ class Parsing{
                 if(!isset(self::$gamesData[$productID])){
 
                     $productTitle = $parsingData->find($pageElement['titleElement'])->text();
-                    $productPrice = trim($parsingData->find($pageElement['priceElement'])->text());
-                    $productBeforeDiscountPrice = trim($parsingData->find($pageElement['discountElement'])->text());
-                    $discountType = $this->discountType($parsingData, $productPrice, $productBeforeDiscountPrice);
-
-                    if($productPrice === $discountType)
-                        $discountType = 'Discount';
+                    $productPrice = $this->transformPrice(trim($parsingData->find($pageElement['priceElement'])->text()), $countryIdentification);
+                    $productBeforeDiscountPrice = $this->transformPrice(trim($parsingData->find($pageElement['discountElement'])->text()), $countryIdentification);
+                    if($productPrice == 0)
+                        $productPrice = 'Free';
+                    $discountType = $this->discountType($parsingData, $productPrice, $productBeforeDiscountPrice, $countryIdentification);
 
                     #Вносим полученные данные в массив
                     $productArray = [
@@ -107,7 +121,6 @@ class Parsing{
                     }
                 }
             }
-
             #Получаем ссылку на следующую страницу
             $nextPageUrl = $elementParsing->find('.m-pagination > .f-active')->next('')->find('a')->attr('href');
             #ПРоверяем что бы ссылка не заканчивалась на -1
@@ -120,7 +133,7 @@ class Parsing{
         #Если полученный массив ссылок не пустой, рекурсируем метод
         if($parsNextPage){
             if(!empty($this->nextPageArray)){
-                $this->formationParsingData($this->nextPageArray, $pageElement, TRUE);
+                $this->formationParsingData($this->nextPageArray, $pageElement, $countryIdentification, TRUE);
             }
         }
     }
@@ -134,7 +147,7 @@ class Parsing{
     # 'gamesData' => self::$gamesData,
     # 'someGameUrl' => $gamesUrlsForParsing
     # ];
-    public function parsingSomeGames(array $gamePageElements, $iterations){
+    public function parsingSomeGames(array $gamePageElements, $countryIdentification, $iterations){
 
         for($i = 0; $i < $iterations; ++$i){
             if(!empty(self::$gamesUrlsForParsing))
@@ -142,9 +155,6 @@ class Parsing{
             else
                 break;
         }
-
-        if(!is_null($curlUrls)){
-
             $curlData = (new MultiCurl($curlUrls))->getData();
 
             foreach ($curlData as $url => $somePage){
@@ -155,24 +165,23 @@ class Parsing{
 
                     $parsingData = pq($parsingData);
                     $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
-                    $productPrice = trim($parsingData->find($gamePageElements['freeRealPrice'])->text());
+                    $productPrice = $this->transformPrice(trim($parsingData->find($gamePageElements['freeRealPrice'])->text()), $countryIdentification);
                     if(empty($productPrice)){
                         $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
-                        $productPrice = trim($parsingData->find($gamePageElements['realPrice'])->text());
+                        $productPrice = $this->transformPrice(trim($parsingData->find($gamePageElements['realPrice'])->text()), $countryIdentification);
                     }
 
-                    self::$gamesData[$gameID]['before_discount'] = $productPrice;
+                    if($productPrice == 0)
+                        $productPrice = 'Free';
 
+                    self::$gamesData[$gameID]['before_discount'] = $productPrice;
+                    if(self::$gamesData[$gameID]['game_price'] === self::$gamesData[$gameID]['before_discount'])
+                        self::$gamesData[$gameID]['discount'] = 'FreeGame';
                 }
             }
 
-            if(!empty(self::$gamesUrlsForParsing))
-                $this->parsingSomeGames($gamePageElements, $iterations);
-        }
-
-
-
-//        return self::$gamesData;
+        if(!empty(self::$gamesUrlsForParsing))
+            $this->parsingSomeGames($gamePageElements, $countryIdentification, $iterations);
     }
 
     public function getImages(array $gamePageElements, $iterations){
@@ -230,54 +239,55 @@ class Parsing{
             #Преобразуем полученные данные в ДОМ-структуру
             $elementParsing = phpQuery::newDocument($curlData);
 
+//            var_dump($elementParsing->find($gamePageElements['fullPage']));
+
             foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+
+                $check = TRUE;
 
                 $parsingData = pq($parsingData);
 
+                $parsingData->find('.price-info > .c-price > .srv_price > span > sup')->remove();
+                $realPrice = trim($parsingData->find('.price-info > .c-price > .srv_price > span')->text());
 
-                $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+                var_dump($realPrice);
+                echo '<br>';
 
-                if(substr($imgElement, 0, 6) != 'https:')
-                    $imgElement = 'https:' . $imgElement;
+//                $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
+//                $productPrice = trim($parsingData->find($gamePageElements['freeRealPrice'])->text());
+//                if(empty($productPrice)){
+//                    $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
+//                    $productPrice = $this->transformPrice(trim($parsingData->find($gamePageElements['realPrice'])->text()), $countryIdentification);
+//                }
+//
+//                if($productPrice == 0)
+//                    $productPrice = 'Free';
+//
+//                self::$gamesData[$gameID]['before_discount'] = $productPrice;
+//                if(self::$gamesData[$gameID]['game_price'] === self::$gamesData[$gameID]['before_discount'])
+//                    self::$gamesData[$gameID]['discount'] = 'FreeGame';
 
-                $testImgElement = substr($imgElement, -3);
 
-                $filename = 'images/game_img/'.$gameID.'.jpg';
-                if (!file_exists($filename)){
-                    $path = 'images/game_new_img/'.$gameID.'.jpg';
-                    file_put_contents($path, file_get_contents($imgElement));
-                }
+//                $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+
+//                if(substr($imgElement, 0, 6) != 'https:')
+//                    $imgElement = 'https:' . $imgElement;
+
+//                $testImgElement = substr($imgElement, -3);
+
+//                $filename = 'images/game_img/'.$gameID.'.jpg';
+//                if (!file_exists($filename)){
+//                    $path = 'images/game_new_img/'.$gameID.'.jpg';
+//                    file_put_contents($path, file_get_contents($imgElement));
+//                }
 //                echo $imgElement . '<br>';
 //                echo $testImgElement . '<br>';
             }
 
-
-    }
-
-    public function transformPrice($counrtyIdentification) {
-
-        foreach (self::$gamesData as $gameID => $dataArray){
-
-//            echo $dataArray['game_price'] . ' ----- ' . ['before_discount'] . '<br>';
-
-            if(!empty($dataArray['game_price']) && $dataArray['game_price'] !== 'Free'){
-                $dataArray['game_price'] = htmlentities($dataArray['game_price']);
-                $dataArray['game_price'] = preg_replace('/[^0-9,.]/', '', $dataArray['game_price']);
-                if($counrtyIdentification === 'rus_ru_ru')
-                    $dataArray['game_price'] = str_replace(',', '.', $dataArray['game_price']);
-                self::$gamesData[$gameID]['game_price'] = (float)$dataArray['game_price'];
+            if(!$check){
+                echo 'NOT GAME!';
             }
 
-            if(!empty($dataArray['before_discount']) && $dataArray['before_discount'] !== 'Free'){
-                $dataArray['before_discount'] = htmlentities($dataArray['before_discount']);
-                $dataArray['before_discount'] = preg_replace('/[^0-9,.]/', '', $dataArray['before_discount']);
-                if($counrtyIdentification === 'rus_ru_ru')
-                    $dataArray['game_price'] = str_replace(',', '.', $dataArray['game_price']);
-                self::$gamesData[$gameID]['before_discount']  = (float)$dataArray['before_discount'];
-            }
-
-//            echo $dataArray['game_price'] . ' ----- ' . ['before_discount'] . '<br>';
-        }
 
     }
 
@@ -293,7 +303,6 @@ class Parsing{
 
         }
 
-
         $sql->close();
     }
 
@@ -307,8 +316,10 @@ class Parsing{
 
     public function clearParcingData(){
         self::$parsingUrls = array();
-        $this->nextPageArray = array();
         self::$gamesData = array();
+//        self::$gamesUrlsForParsing = array();
         self::$imagesUrls = array();
+
+        $this->nextPageArray = array();
     }
 }
