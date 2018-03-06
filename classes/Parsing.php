@@ -7,6 +7,7 @@ require_once 'Database.php';
 class Parsing{
 
     private static
+        $currencyData = array(),
         $parsingUrls = array(),
         $gamesUrlsForParsing = array(),
         $imagesUrls = array();
@@ -32,10 +33,13 @@ class Parsing{
 
     private function discountType(phpQueryObject $parsingData, $productPrice, $productBeforeDiscountPrice, $countryIdentification){
 
-        if($productPrice === 'Free' || !empty($productBeforeDiscountPrice)){
+        if($productPrice === 9999999 || !empty($productBeforeDiscountPrice)){
             $discountType = $parsingData->find('.c-price span img')->attr('alt');
             if(empty($discountType)){
-                $discountType = $parsingData->find('.c-price > span:last')->text();
+                $discountType = trim($parsingData->find('.c-price > span:last')->text());
+                if(stristr($discountType, 'Ücretsiz') || stristr($discountType, '₺') || stristr($discountType, 'esetén') ||
+                    stristr($discountType, '적용)'))
+                    $discountType = 'EA Access';
                 if(empty($discountType))
                     $discountType = 'Discount';
             }
@@ -56,12 +60,65 @@ class Parsing{
         $price = htmlentities($price);
         $price = preg_replace('/[^0-9,.]/', '', $price);
 
-        if($countryIdentification === 'rus_ru_ru' || $countryIdentification === 'evro_de_de')
+        if($countryIdentification === 'rus_ru_ru' || $countryIdentification === 'evro_de_de' || $countryIdentification === 'brazil_pt_br' ||
+           $countryIdentification === 'africa_en_za' || $countryIdentification === 'turkish_tr_tr' || $countryIdentification === 'norvay_nb_no')
             $price = str_replace(',', '.', $price);
+
+        if($countryIdentification === 'argentina_es_ar' || $countryIdentification === 'columbia_es_co'){
+            $price = str_replace('.', '', $price);
+            $price = str_replace(',', '.', $price);
+        }
+
+        if($countryIdentification === 'hongkong_en_hk' || $countryIdentification === 'india_en_in' || $countryIdentification === 'mexico_es_mx' ||
+           $countryIdentification === 'japan_ja_jp' || $countryIdentification === 'korea_ko_kr' || $countryIdentification === 'taiwann_zh_tw') {
+            $price = str_replace(',', '', $price);
+        }
 
         $cleanPrice = (float)$price;
 
         return $cleanPrice;
+    }
+
+    public function currencyParsing($url) {
+
+        $curlData = (new Curl($url))->getCurlData();
+
+        $elementParsing = phpQuery::newDocument($curlData);
+
+        $currency = pq($elementParsing->find('.fx-top'));
+
+        $currencyData = array(
+            'rus_ru_ru'         => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(18) td:eq(4)')->text(),
+            'evro_de_de'        => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(6) td:eq(4)')->text(),
+            'argentina_es_ar'   => (float)$currency->find('.pure-table:eq(0) tbody tr:eq(0) td:eq(4)')->text(),
+            'brazil_pt_br'      => (float)$currency->find('.pure-table:eq(0) tbody tr:eq(7) td:eq(4)')->text(),
+            'canada_en_ca'      => (float)$currency->find('.pure-table:eq(0) tbody tr:eq(8) td:eq(4)')->text(),
+            'columbia_es_co'    => (float)$currency->find('.pure-table:eq(0) tbody tr:eq(11) td:eq(4)')->text(),
+            'hongkong_en_hk'    => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(6) td:eq(4)')->text(),
+            'india_en_in'       => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(8) td:eq(4)')->text(),
+            'africa_en_za'      => (float)$currency->find('.pure-table:eq(4) tbody tr:eq(27) td:eq(4)')->text(),
+            'turkish_tr_tr'     => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(22) td:eq(4)')->text(),
+            'singapore_en_sg'   => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(23) td:eq(4)')->text(),
+            'japan_ja_jp'       => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(9) td:eq(4)')->text(),
+            'korea_ko_kr'       => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(10) td:eq(4)')->text(),
+            'EN_AU'             => (float)$currency->find('.pure-table:eq(3) tbody tr:eq(0) td:eq(4)')->text(),
+            'mexico_es_mx'      => (float)$currency->find('.pure-table:eq(0) tbody tr:eq(22) td:eq(4)')->text(),
+            'newzeland_en_nz'   => (float)$currency->find('.pure-table:eq(3) tbody tr:eq(10) td:eq(4)')->text(),
+//            'ES_CL' => (float)$currency->find('.pure-table:eq(0) tbody tr:eq(10) td:eq(4)')->text(),
+//            'CS_CZ' => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(5) td:eq(4)')->text(),
+//            'DA_DK' => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(7) td:eq(4)')->text(),
+//            'EN_GB' => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(1) td:eq(4)')->text(),
+//            'HU_HU' => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(9) td:eq(4)')->text(),
+//            'EN_IL' => (float)$currency->find('.pure-table:eq(3) tbody tr:eq(5) td:eq(4)')->text(),
+//            'EN_NZ' => (float)$currency->find('.pure-table:eq(3) tbody tr:eq(10) td:eq(4)')->text(),
+//            'NB_NO' => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(15) td:eq(4)')->text(),
+//            'PL_PL' => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(16) td:eq(4)')->text(),
+//            'DE_CH' => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(19) td:eq(4)')->text(),
+//            'ZH_TW' => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(27) td:eq(4)')->text()
+        );
+
+
+        self::$currencyData = $currencyData;
     }
 
     public function formationParsingData(array $parsingUrls, array $pageElement, $countryIdentification, $parsNextPage = False){
@@ -96,7 +153,7 @@ class Parsing{
                     $productPrice = $this->transformPrice(trim($parsingData->find($pageElement['priceElement'])->text()), $countryIdentification);
                     $productBeforeDiscountPrice = $this->transformPrice(trim($parsingData->find($pageElement['discountElement'])->text()), $countryIdentification);
                     if($productPrice == 0)
-                        $productPrice = 'Free';
+                        $productPrice = 9999999;
                     $discountType = $this->discountType($parsingData, $productPrice, $productBeforeDiscountPrice, $countryIdentification);
 
                     #Вносим полученные данные в массив
@@ -112,7 +169,7 @@ class Parsing{
                     self::$gamesData[$productID] = $productArray;
 
                     #Собираем урлы на бесплатные игры + без картинок
-                    if($productArray['game_price'] === 'Free'){
+                    if($productArray['game_price'] === 9999999){
                         self::$gamesUrlsForParsing[] = $productLink;
                     }
                     $filename = 'images/game_img/'.$productID.'.jpg';
@@ -172,7 +229,7 @@ class Parsing{
                     }
 
                     if($productPrice == 0)
-                        $productPrice = 'Free';
+                        $productPrice = 9999999;
 
                     self::$gamesData[$gameID]['before_discount'] = $productPrice;
                     if(self::$gamesData[$gameID]['game_price'] === self::$gamesData[$gameID]['before_discount'])
@@ -226,6 +283,24 @@ class Parsing{
 
         if(!empty(self::$imagesUrls))
             $this->getImages($gamePageElements, $iterations);
+
+    }
+
+    public function currencyPrice($countryIdentification) {
+
+        if($countryIdentification !== 'usa_en_us') {
+
+            foreach (self::$gamesData as $key => $gameData) {
+
+//                echo $gameData['game_price'] . '*' . self::$currencyData[$countryIdentification] . '<br>';
+
+                    if($gameData['game_price'] !== 9999999)
+                        self::$gamesData[$key]['game_price'] = $gameData['game_price'] * self::$currencyData[$countryIdentification];
+                    if($gameData['before_discount'] !== 9999999)
+                        self::$gamesData[$key]['before_discount'] = $gameData['before_discount'] * self::$currencyData[$countryIdentification];
+
+            }
+        }
 
     }
 

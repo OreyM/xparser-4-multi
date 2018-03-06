@@ -27,10 +27,93 @@ class GenerateData extends Parsing {
 
             $result = $Database->leftJoin($sql, $generalCountryTable, $nextCountryTable, 'game_id');
 
-            $this->getGamesUrls_General($result);
+            $this->getGamesUrls_General($result, $nextCountryID);
 
             $sql->close();
         }
+    }
+
+    public function checkMissGames_Another($countryArray) {
+        $generalCountryTable = key($countryArray);
+        $generalCountryID = current($countryArray);
+
+        while ($array = current($countryArray)) {
+
+            $nextCountryID = next($countryArray);
+
+            if (!($nextCountryID))
+                break;
+
+            $nextCountryTable = key($countryArray);
+
+            $Database = Database::checkConnect();
+            $sql = $Database->connectDatabase();
+
+//            echo $nextCountryTable . '<br>';
+//            echo $generalCountryTable . '<br>';
+
+            $result = $Database->leftJoin($sql, $nextCountryTable, $generalCountryTable, 'game_id');
+
+            $this->getGamesUrls_Another($result, $nextCountryID);
+
+            $sql->close();
+        }
+    }
+
+    private function getGamesUrls_General(mysqli_result $data, $countruUrlID){
+
+        while ($missGameLink = $data->fetch_object()){
+
+            if(!isset(self::$gamesData[$missGameLink->game_id])){
+
+                $missGameLink->game_link = str_replace($countruUrlID, '/en-us', $missGameLink->game_link);
+
+                $productArray = [
+                    'game_id'       => $missGameLink->game_id,
+                    'game_name'     => $missGameLink->game_name,
+                    'game_link'     => $missGameLink->game_link,
+                    'game_price'    => NULL,
+                    'before_discount' => NULL,
+                    'discount' => $missGameLink->discount
+                ];
+                self::$gamesData[$missGameLink->game_id] = $productArray;
+
+                self::$missGamesUrls[] = $missGameLink->game_link;
+
+//            echo "<a href='$missGameLink->game_link'>$missGameLink->game_name</a><br>";
+            }
+        }
+        echo '<pre>';
+//        var_dump(self::$missGamesUrls);
+        echo '</pre>';
+    }
+
+    private function getGamesUrls_Another(mysqli_result $data, $countruUrlID){
+
+        while ($missGameLink = $data->fetch_object()){
+
+            if(!isset(self::$gamesData[$missGameLink->game_id])){
+
+                $missGameLink->game_link = str_replace('/en-us', $countruUrlID, $missGameLink->game_link);
+
+                $productArray = [
+                    'game_id'       => $missGameLink->game_id,
+                    'game_name'     => $missGameLink->game_name,
+                    'game_link'     => $missGameLink->game_link,
+                    'game_price'    => NULL,
+                    'before_discount' => NULL,
+                    'discount' => $missGameLink->discount
+                ];
+                self::$gamesData[$missGameLink->game_id] = $productArray;
+
+                self::$missGamesUrls[] = $missGameLink->game_link;
+
+//                echo "<a href='$missGameLink->game_link'>$missGameLink->game_name</a><br>";
+            }
+        }
+        echo '<pre>';
+//        var_dump(self::$gamesData);
+        echo '</pre>';
     }
 
     public function parsingMissGame(array $gamePageElements, $countryIdentification, $iterations){
@@ -62,49 +145,38 @@ class GenerateData extends Parsing {
                 $parsingData->find('.price-info > .c-price > .srv_price > span > sup')->remove();
                 $realPrice = $this->transformPrice(trim($parsingData->find('.price-info > .c-price > .srv_price > span')->text()),
                                                         $countryIdentification);
+                $title = trim($parsingData->find('#page-title')->text());
                 $beforeDiscountPrice = NULL;
 
                 if(empty($realPrice)) {
                     self::$gamesData[$gameID]['game_price'] = NULL;
-                    self::$gamesData[$gameID]['game_link'] = NULL;
+//                    self::$gamesData[$gameID]['game_link'] = NULL;
                 }
                 else
                     self::$gamesData[$gameID]['game_price'] = $realPrice;
                 self::$gamesData[$gameID]['before_discount'] = $beforeDiscountPrice;
+                self::$gamesData[$gameID]['game_name'] = $title;
             }
 
-            if(!$checkGame){
-                self::$gamesData[$gameID]['game_link'] = NULL;
-            }
+//            if(!$checkGame){
+//                self::$gamesData[$gameID]['game_link'] = NULL;
+//            }
         }
 
         if(!empty(self::$missGamesUrls))
             $this->parsingMissGame($gamePageElements, $countryIdentification, $iterations);
     }
 
-    private function getGamesUrls_General(mysqli_result $data){
+    public function addDataDB($table){
+        $Database = Database::checkConnect();
+        $sql = $Database->connectDatabase();
 
-        while ($missGameLink = $data->fetch_object()){
+        foreach (self::$gamesData as $toDBData) {
 
-            $missGameLink->game_link = str_replace('/ru-ru', '/en-us', $missGameLink->game_link);
+            $Database->insertData($sql, $table, $toDBData);
 
-            $productArray = [
-                'game_id'       => $missGameLink->game_id,
-                'game_name'     => $missGameLink->game_name,
-                'game_link'     => $missGameLink->game_link,
-                'game_price'    => NULL,
-                'before_discount' => NULL,
-                'discount' => $missGameLink->discount
-            ];
-            self::$gamesData[$missGameLink->game_id] = $productArray;
-
-            self::$missGamesUrls[] = $missGameLink->game_link;
-
-//            echo "<a href='$missGameLink->game_link'>$missGameLink->game_name</a><br>";
         }
 
-        echo '<pre>';
-//        var_dump(self::$missGamesUrls);
-        echo '</pre>';
+        $sql->close();
     }
 }
