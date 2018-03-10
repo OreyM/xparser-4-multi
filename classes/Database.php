@@ -48,8 +48,9 @@ class Database{
         return $param;
     }
 
-    public function selectData(mysqli $db, $table){
-        if(($query = $db->query("SELECT * FROM {$table}")) === FALSE)
+    public function selectData(mysqli $db, $table, $requestData){
+
+        if(($query = $db->query("SELECT {$requestData} FROM {$table}")) === FALSE)
             self::errorDataBase($db);
         return $query;
     }

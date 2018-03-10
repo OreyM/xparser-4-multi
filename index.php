@@ -2,6 +2,9 @@
 $start = microtime(true);
 require_once 'config/config.php';
 require_once 'classes/Parsing.php';
+require_once 'classes/GamesData.php';
+
+require_once 'classes/InsertData.php';
 require_once 'classes/GenerateData.php';
 require_once 'classes/MissGames.php';
 require_once 'classes/CreateTable.php';
@@ -61,27 +64,30 @@ $gamePageElements = [
     'freeRealPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > .price-disclaimer > span'
 ];
 
-$dataParsing = new Parsing();
+//$dataParsing = new Parsing();
 
 #Собираем курсы валют
-$dataParsing->currencyParsing('http://ru.fxexchangerate.com/currency-exchange-rates.html');
-//$dataParsing->varDump();
+//$dataParsing->currencyParsing('http://ru.fxexchangerate.com/currency-exchange-rates.html');
+////$dataParsing->varDump();
 
 
-foreach ($countryArray as $tableName => $countryID) {
+//foreach ($countryArray as $tableName => $countryID) {
+//
+//    $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
+//
+//    #TRUE - pars next page, FALSE - not pars next page
+//    $dataParsing->formationParsingData($parsingUrls, $allGamesPageElements, $tableName, TRUE);
+//    $dataParsing->parsingSomeGames($gamePageElements, $tableName, 30);
+////    $dataParsing->getImages($gamePageElements, 30);
+//    $dataParsing->currencyPrice($tableName);
+//    $dataParsing->addDataDB($tableName);
+//
+////    $dataParsing->varDump();
+//    $dataParsing->clearParcingData();
+//}
 
-    $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
-
-    #TRUE - pars next page, FALSE - not pars next page
-    $dataParsing->formationParsingData($parsingUrls, $allGamesPageElements, $tableName, TRUE);
-    $dataParsing->parsingSomeGames($gamePageElements, $tableName, 30);
-//    $dataParsing->getImages($gamePageElements, 30);
-    $dataParsing->currencyPrice($tableName);
-    $dataParsing->addDataDB($tableName);
-
-    $dataParsing->varDump();
-    $dataParsing->clearParcingData();
-}
+$generateGames = new GamesData();
+$generateGames->gamesID($countryArray);
 
 ####################
 ####################
