@@ -5,7 +5,47 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a94b411a-8a82-48b6-bb69-abfbd39e78ed" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bnhn7gn3v07g.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bnprk9hb5lhg.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bnrlkl610dkl.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bpdn8kwdsd0c.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bpdwh28hm2w7.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bqjg7j8xsl4p.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bqt2r5fk3p7r.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/br41rp923ng4.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/brj918k9k7s6.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/brmfzbn6hnk2.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/brngrxb418df.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/brq6vdtzh6wv.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/brvhfrc5kwnw.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bs2s19008ntl.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bsh5fpmr3gd8.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bt259h6m8l07.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/btb8c8vb0lcl.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/btbslj19dd3t.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/btfdnhql03gm.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/btjh9q47g3tg.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/btplxww2g1kt.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bvjc7w363rbb.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bvnrff9xj6km.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bwmb5js5x7xv.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bwvg5w03kwmn.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bxk4f4k72tpq.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bxz759x3r5gz.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/bzvlcck2dj0j.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c1771n3p505c.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c1jfc3374wdt.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c1shgh9p2npr.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c22hz67nwrjd.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c2css1s7lwbf.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c2ghsxbk4hb3.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c2r66rh0514v.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c3bchk6lsb0d.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c3fxtth4nfqn.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c3qdk7r638h2.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c47gzzbmr5wg.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/game_new_img/c4r968dknj7z.jpg" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -90,7 +130,7 @@
         <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="428">
-              <caret line="419" column="8" lean-forward="true" selection-start-line="419" selection-start-column="8" selection-end-line="430" selection-end-column="22" />
+              <caret line="419" column="8" lean-forward="false" selection-start-line="419" selection-start-column="8" selection-end-line="430" selection-end-column="22" />
               <folding>
                 <element signature="n#__construct#0;n#Parsing#0;n#!!top" expanded="false" />
                 <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
@@ -139,7 +179,7 @@
         <entry file="file://$PROJECT_DIR$/test.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="171">
-              <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="78" selection-end-column="2" />
+              <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="78" selection-end-column="2" />
               <folding>
                 <element signature="e#2267#2606#0#PHP" expanded="false" />
                 <element signature="e#2629#2964#0#PHP" expanded="false" />
@@ -323,16 +363,15 @@
       <updated>1519303345937</updated>
       <workItem from="1519303348607" duration="169200000" />
       <workItem from="1520577058548" duration="52331000" />
-      <workItem from="1521020898527" duration="8850000" />
+      <workItem from="1521020898527" duration="8908000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="230381000" />
+    <option name="totallyTimeSpent" value="230439000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2694928" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -343,7 +382,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15733333" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6171244" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6171244" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -708,7 +747,7 @@
     <entry file="file://$PROJECT_DIR$/test.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
-          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="78" selection-end-column="2" />
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="78" selection-end-column="2" />
           <folding>
             <element signature="e#2267#2606#0#PHP" expanded="false" />
             <element signature="e#2629#2964#0#PHP" expanded="false" />
@@ -770,7 +809,7 @@
     <entry file="file://$PROJECT_DIR$/classes/Parsing.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="428">
-          <caret line="419" column="8" lean-forward="true" selection-start-line="419" selection-start-column="8" selection-end-line="430" selection-end-column="22" />
+          <caret line="419" column="8" lean-forward="false" selection-start-line="419" selection-start-column="8" selection-end-line="430" selection-end-column="22" />
           <folding>
             <element signature="n#__construct#0;n#Parsing#0;n#!!top" expanded="false" />
             <element signature="n#getGeneralUrls#0;n#Parsing#0;n#!!top" expanded="false" />
