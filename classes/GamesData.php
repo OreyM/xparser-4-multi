@@ -10,31 +10,34 @@ class GamesData {
 
         $countryTable = [
             'usa_en_us',
-            'hongkong_en_hk',
             'india_en_in',
             'newzeland_en_nz',
             'canada_en_ca',
             'africa_en_za',
-            'singapore_en_sg',
             'rus_ru_ru',
             'evro_de_de',
             'mexico_es_mx',
             'brazil_pt_br',
             'argentina_es_ar',
             'columbia_es_co',
-            'turkish_tr_tr'
+            'turkish_tr_tr',
+            'singapore_en_sg',
+            'hongkong_en_hk'
         ];
 
         foreach ($countryTable as $country) {
-            if($query = $sql->query("SELECT game_name FROM {$country} WHERE game_id = '{$gameID}'")) {
-                $data =  $query->fetch_object();
-                $gameName = $data->game_name;
+            $query = $sql->query("SELECT game_name FROM {$country} WHERE game_id = '{$gameID}'");
+            $data =  $query->fetch_object();
+            $gameName = $data->game_name;
 
-                $query->free();
+            $query->free();
 
-                return $gameName;
+            if(!empty($gameName)) {
+                break;
             }
         }
+
+        return $gameName;
     }
 
     private function checkQuery($data) {
