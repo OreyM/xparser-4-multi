@@ -12,6 +12,9 @@ class Parsing{
         $gamesUrlsForParsing = array(),
         $imagesUrls = array();
 
+    public static
+        $newImagesData = array();
+
     protected static
         $gamesData = array();
 
@@ -77,6 +80,40 @@ class Parsing{
         $cleanPrice = (float)$price;
 
         return $cleanPrice;
+    }
+
+    public function getCountryName($countryTableID) {
+        switch ($countryTableID) {
+            case 'usa_en_us':
+                return 'США';
+            case 'rus_ru_ru':
+                return 'Россия';
+            case 'evro_de_de':
+                return 'Евро';
+            case 'argentina_es_ar':
+                return 'Аргентина';
+            case 'brazil_pt_br':
+                return 'Бразилия';
+            case 'canada_en_ca':
+                return 'Канада';
+            case 'columbia_es_co':
+                return 'Колумбия';
+            case 'hongkong_en_hk':
+                return 'Гонконг';
+            case 'india_en_in':
+                return 'Индия';
+            case 'africa_en_za':
+                return 'Африка';
+            case 'turkish_tr_tr':
+                return 'Турция';
+            case 'singapore_en_sg':
+                return 'Сингапур';
+            case 'mexico_es_mx':
+                return 'Мексика';
+            case 'newzeland_en_nz':
+                return 'Новая Зеландия';
+        }
+
     }
 
     public function currencyParsing($url) {
@@ -158,6 +195,7 @@ class Parsing{
 
                     #Вносим полученные данные в массив
                     $productArray = [
+                        'country'       => $this->getCountryName($countryIdentification),
                         'game_id'       => $productID,
                         'game_name'     => $productTitle,
                         'game_link'     => $productLink,
@@ -172,7 +210,7 @@ class Parsing{
                     if($productArray['game_price'] === 9999999){
                         self::$gamesUrlsForParsing[] = $productLink;
                     }
-                    $filename = 'images/game_img/'.$productID.'.jpg';
+                    $filename = '../images/game_img/'.$productID.'.jpg';
                     if (!file_exists($filename)){
                         self::$imagesUrls[] = $productLink;
                     }
@@ -250,34 +288,46 @@ class Parsing{
                 break;
         }
 
-        $curlData = (new MultiCurl($curlUrls))->getData();
+        if(!empty($curlUrls)) {
 
-        foreach ($curlData as $url => $somePage){
-            $elementParsing = phpQuery::newDocument($somePage);
-            $gameID = substr($url, -12);
+            $curlData = (new MultiCurl($curlUrls))->getData();
 
-            foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+            foreach ($curlData as $url => $somePage){
+                $elementParsing = phpQuery::newDocument($somePage);
+                $gameID = substr($url, -12);
 
-                $parsingData = pq($parsingData);
+                foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
 
-                $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
-                if(substr($imgElement, 0, 6) != 'https:')
-                    $imgElement = 'https:' . $imgElement;
+                    $parsingData = pq($parsingData);
 
-                $path = 'images/game_new_img/'.$gameID.'.jpg';
-                file_put_contents($path, file_get_contents($imgElement));
-                echo "
-                    <div class='container'>
-                        <div class=\"alert alert-success\" role=\"alert\">
-                            A new image for 
-                            <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong> 
-                            ---- Game ID - 
-                            <strong>{$gameID}</strong> 
-                            ---- 
-                            <a href='{$url}'>Game Link</a>
-                        </div>
-                    </div>
-                ";
+                    $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+                    if(substr($imgElement, 0, 6) != 'https:')
+                        $imgElement = 'https:' . $imgElement;
+
+                    $path = '../images/game_new_img/'.$gameID.'.jpg';
+                    file_put_contents($path, file_get_contents($imgElement));
+                    $path = '../images/game_img/'.$gameID.'.jpg';
+                    file_put_contents($path, file_get_contents($imgElement));
+
+//                echo "
+//                    <div class='container'>
+//                        <div class=\"alert alert-success\" role=\"alert\">
+//                            A new image for
+//                            <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong>
+//                            ---- Game ID -
+//                            <strong>{$gameID}</strong>
+//                            ----
+//                            <a href='{$url}'>Game Link</a>
+//                        </div>
+//                    </div>
+//                ";
+
+                    self::$newImagesData[] = [
+                        'gameName'  => self::$gamesData[$gameID]['game_name'],
+                        'gameID'    => $gameID,
+                        'gameUrl'   => $url
+                    ];
+                }
             }
         }
 
@@ -392,8 +442,9 @@ class Parsing{
     public function clearParcingData(){
         self::$parsingUrls = array();
         self::$gamesData = array();
-//        self::$gamesUrlsForParsing = array();
+        self::$gamesUrlsForParsing = array();
         self::$imagesUrls = array();
+        self::$newImagesData = array();
 
         $this->nextPageArray = array();
     }

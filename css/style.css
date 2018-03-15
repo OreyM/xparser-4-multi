@@ -1,0 +1,39 @@
+.btn-large {
+width: 360px;
+margin: 6px 0px;
+}
+
+.btn-wrap {
+display: inline-block;
+text-align: center;
+}
+
+.current-time {
+display: block;
+text-align: center;
+margin: 0 auto;
+width: 360px;
+}
+
+#card-alert {
+text-align: center;
+}
+
+.games-id-wrap {
+    width: 100%;
+    height: 85%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+.games-id-wrap .data {
+    width: 50%;
+    background-color: #f6f6f6;
+    padding: 40px 42px;
+}

@@ -1,140 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>XParser Multi RC1</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
 <?php
-$start = microtime(true);
 require_once 'config/config.php';
-require_once 'classes/Parsing.php';
-require_once 'classes/GamesData.php';
+# $offset - смещение относительно Гринвича
+function currentDateTime ($offset) {
+    date_default_timezone_set("UTC");
+    $time = time();
+    $time += $offset * 3600;
 
-require_once 'classes/InsertData.php';
-require_once 'classes/GenerateData.php';
-require_once 'classes/MissGames.php';
-require_once 'classes/CreateTable.php';
-
-
-$countryArray = [
-    'usa_en_us' => '/en-us',
-    'rus_ru_ru' => '/ru-ru',
-    'evro_de_de'  => '/de-de',
-    'argentina_es_ar' => '/es-ar',
-    'brazil_pt_br' => '/pt-br',
-    'canada_en_ca' => '/en-ca',
-    'columbia_es_co' => '/es-co',
-    'hongkong_en_hk' => '/en-hk',
-    'india_en_in' => '/en-in',
-    'africa_en_za' => '/en-za',
-    'turkish_tr_tr' => '/tr-tr',
-    'singapore_en_sg' => '/en-sg',
-    'mexico_es_mx' => '/es-mx',
-    'newzeland_en_nz' => '/en-nz',
-
-//    'Australia' => '/en-au',
-//    'japan_ja_jp' => '/ja-jp',
-//    'korea_ko_kr' => '/ko-kr',
-//    'taiwann_zh_tw' => '/zh-tw',
-//    'hungary_hu_hu' => '/hu-hu',
-//    'israel_en_il' => '/en-il',
-//    'norvay_nb_no' => '/nb-no',
-//    'England' => '/en-gb',
-//    'Dania' => '/da-dk',
-//    'New Zealand' => '/en-nz',
-//    'Poland' => '/pl-pl',
-//    'Switzerland' => '/de-ch',
-//    'Chili' => '/es-cl',
-//    'Czech' => '/cs-cz',
-];
-
-$sitePage = [
-    '/store/top-paid/games/xbox',
-    '/store/best-rated/games/xbox',
-    '/store/new/games/xbox',
-    '/store/top-free/games/xbox'
-];
-
-$allGamesPageElements = [
-    'fullPage'         => '.context-list-page .m-product-placement-item',
-    'titleElement'     => '.c-heading',
-    'priceElement'     => '.c-price span[itemprop="price"]',
-    'newPriceElement'  => '.price-info .c-price .srv_price span',
-    'imageElement'     => '.srv_appHeaderBoxArt > img',
-    'discountElement'  => '.c-price s'
-];
-
-$gamePageElements = [
-    'fullPage' => '.m-product-detail-hero .m-product-detail-hero-product-placement',
-    'realPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > span',
-    'freeRealPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > .price-disclaimer > span'
-];
-
-//$dataParsing = new Parsing();
-
-#Собираем курсы валют
-//$dataParsing->currencyParsing('http://ru.fxexchangerate.com/currency-exchange-rates.html');
-////$dataParsing->varDump();
-
-
-//foreach ($countryArray as $tableName => $countryID) {
-//
-//    $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
-//
-//    #TRUE - pars next page, FALSE - not pars next page
-//    $dataParsing->formationParsingData($parsingUrls, $allGamesPageElements, $tableName, TRUE);
-//    $dataParsing->parsingSomeGames($gamePageElements, $tableName, 30);
-////    $dataParsing->getImages($gamePageElements, 30);
-//    $dataParsing->currencyPrice($tableName);
-//    $dataParsing->addDataDB($tableName);
-//
-////    $dataParsing->varDump();
-//    $dataParsing->clearParcingData();
-//}
-
-$generateGames = new GamesData();
-$generateGames->gamesID($countryArray);
-
-####################
-####################
-#####  #############
-
-//$searchGames = new GenerateData();
-//$searchGames->checkMissGames_General($countryArray);
-//$searchGames->parsingMissGame($gamePageElements, 'usa_us_us', 20);
-//$searchGames->addDataDB('usa_en_us');
-//$searchGames->varDump();
-//$searchGames->clearParcingData();
+    return $time;
+}
+?>
 
 
 
 
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="buttons-wrap">
+                <div class="title">
+                    <h3>XParser Multi RC1 /Prototype <?php echo VERSION?></h3>
+                </div>
+                <div class="col s12 btn-wrap">
+                    <a class="btn btn-large waves-effect waves-light red darken-4" href="core/start_parsing.php">Начать парсинг</a>
+                </div>
+                <div class="col s12 btn-wrap">
+                    <a class="btn btn-large waves-effect waves-light purple darken-4" href="core/create_table.php">Сформировать таблицу</a>
+                </div>
+                <div class="col s12 btn-wrap">
+                    <a class="btn btn-large waves-effect waves-light light-green darken-4" href="core/show_table.php">Отобразить результаты</a>
+                </div>
+                <div class="col s12 btn-wrap">
+                    <form action="core/parsing_discount.php" method="POST">
+                        <div class="input-field">
+                            <input value="" id="first_name2" type="text" class="validate" name="urlParsing">
+                            <label class="active" for="first_name2">Enter url for parsing</label>
+                            <div class="col s12 btn-wrap">
+                                <input type="submit" name="send" value="Собрать скидки" class="btn btn-large waves-effect waves-light light-yellow darken-4">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col s12">
+                    <div id="card-alert" class="card green current-time">
+                        <div class="card-content white-text">
+                            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Текущая Дата / Время</span>
+                            <p><?php echo date('d.m.Y', currentDateTime(2)) ?></p>
+                            <p><?php echo date('H:i:s', currentDateTime(2)) ?></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Mexico</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(-6)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(-6)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Columbia</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(-5)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(-5)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>USA</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(-4)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(-4)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Canada</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(-4)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(-4)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Brazil</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(-3)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(-3)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Argentina</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(-3)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(-3)) ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!---->
+
+        <div class="row">
+
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>S.Africa</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(2)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(2)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Turkish</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(3)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(3)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>India</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(5.5)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(5.5)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>HongKong</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(8)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(8)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Singapore</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(8)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(8)) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2">
+                <div id="card-alert" class="card green">
+                    <div class="card-content white-text">
+                        <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>N.Zeland</span>
+                        <p><?php echo date('d.m.Y', currentDateTime(13)) ?></p>
+                        <p><?php echo date('H:i:s', currentDateTime(13)) ?></p>
+                    </div>
+                </div>
+            </div>
 
 
+        </div>
+    </div>
+</section>
 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
+</body>
+</html>
 
-
-
-###################################################
-//$checkGames = new MissGames();
-//$checkGames->checkMissGames();
-
-####################
-####################
-#####  #############
-
-//$searchAnotherGames = new GenerateData();
-//$searchAnotherGames->checkMissGames_Another($countryArray);
-//$searchGames->parsingMissGame($gamePageElements, 'rus_ru_ru', 20);
-//$searchGames->varDump();
-//$searchGames->clearParcingData();
-
-//$someGame = new Parsing();
-#Игра есть, ценник без скидок и бесплатных игр
-//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/project-cars-digital-edition/bwd6mg147s5j', $gamePageElements);
-#Игры не существует
-//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/hasbro-family-fun-pack/c2css1s7lwbf', $gamePageElements);
-#Ссылка на игру действительна, но ценника нет - Игра только в бандле
-//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/dragon-age-%d0%98%d0%bd%d0%ba%d0%b2%d0%b8%d0%b7%d0%b8%d1%86%d0%b8%d1%8f/c47gzzbmr5wg', $gamePageElements);
-#Ссылка на игру дейстивительна, но игра больше не предоставляется
-//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/nba-2k16-preorder-edition/brj918k9k7s6', $gamePageElements);
-#Ссылка на игру дейстивительна, но игра не для ХБОКСА
-//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/motogp-15/bsh5fpmr3gd8?activetab=pivot%3aoverviewtab', $gamePageElements);
-
-echo '<br>';
-printf('Скрипт выполнялся %.4F сек.', (microtime(true) - $start));

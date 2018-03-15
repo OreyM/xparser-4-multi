@@ -3,41 +3,54 @@
 class GamesData {
 
     private static
-        $gamesID = array(),
-        $sortPrice = array();
+        $gamesPrice = array(),
+        $insertArray = array();
 
-    private function getCountryName($countryTableID) {
-        switch ($countryTableID) {
-            case 'usa_en_us':
-                return 'США';
-            case 'rus_ru_ru':
-                return 'Россия';
-            case 'evro_de_de':
-                return 'Евро';
-            case 'argentina_es_ar':
-                return 'Аргентина';
-            case 'brazil_pt_br':
-                return 'Бразилия';
-            case 'canada_en_ca':
-                return 'Канада';
-            case 'columbia_es_co':
-                return 'Колумбия';
-            case 'hongkong_en_hk':
-                return 'Гонконг';
-            case 'india_en_in':
-                return 'Индия';
-            case 'africa_en_za':
-                return 'Африка';
-            case 'turkish_tr_tr':
-                return 'Турция';
-            case 'singapore_en_sg':
-                return 'Сингапур';
-            case 'mexico_es_mx':
-                return 'Мексика';
-            case 'newzeland_en_nz':
-                return 'Новая Зеландия';
+    private function getGameName($sql, $gameID) {
+
+        $countryTable = [
+            'usa_en_us',
+            'hongkong_en_hk',
+            'india_en_in',
+            'newzeland_en_nz',
+            'canada_en_ca',
+            'africa_en_za',
+            'singapore_en_sg',
+            'rus_ru_ru',
+            'evro_de_de',
+            'mexico_es_mx',
+            'brazil_pt_br',
+            'argentina_es_ar',
+            'columbia_es_co',
+            'turkish_tr_tr'
+        ];
+
+        foreach ($countryTable as $country) {
+            if($query = $sql->query("SELECT game_name FROM {$country} WHERE game_id = '{$gameID}'")) {
+                $data =  $query->fetch_object();
+                $gameName = $data->game_name;
+
+                $query->free();
+
+                return $gameName;
+            }
         }
+    }
 
+    private function checkQuery($data) {
+
+        if(!$data) {
+
+            $data = [
+                'country' => NULL,
+                'link' => NULL,
+                'price' => NULL,
+                'before_discount' => NULL
+            ];
+            return (object)$data;
+        }
+        else
+            return $data->fetch_object();
     }
 
     public function gamesID ($countryArray) {
@@ -53,27 +66,27 @@ class GamesData {
 
             while ($queryData = $resultQuery->fetch_object()){
 
-                if(!array_search($queryData->game_id, self::$gamesID))
-                    self::$gamesID[$queryData->game_id] = $array;
+                if(!array_search($queryData->game_id, self::$gamesPrice))
+                    self::$gamesPrice[$queryData->game_id] = $array;
             }
 
             $resultQuery->free();
         }
 
-        foreach (self::$gamesID as $gameID => &$priceArray) {
+        foreach (self::$gamesPrice as $gameID => &$priceArray) {
 
             foreach ($countryArray as $countryTable => $countryUrl) {
                 $resultQuery = $sql->query("SELECT game_price FROM {$countryTable} WHERE game_id = '{$gameID}'");
                 $getPrice = $resultQuery->fetch_object();
                 if(!is_null($getPrice->game_price))
-                    $priceArray[$this->getCountryName($countryTable)] = (float)$getPrice->game_price;
+                    $priceArray[$countryTable] = (float)$getPrice->game_price;
                 else
-                    $priceArray[$this->getCountryName($countryTable)] = $getPrice->game_price;
+                    $priceArray[$countryTable] = $getPrice->game_price;
                 $resultQuery->free();
             }
         }
 
-        foreach (self::$gamesID as $gameID => &$priceArray) {
+        foreach (self::$gamesPrice as $gameID => &$priceArray) {
 
             foreach ($priceArray as $key => $value) {
                 if(is_null($value))
@@ -81,19 +94,78 @@ class GamesData {
             }
             asort($priceArray);
 
-            if(count($priceArray) > 5){
-                $priceArray = array_slice($priceArray,0, 5 - count($priceArray));
+            if(count($priceArray) > 6){
+                $priceArray = array_slice($priceArray,0, 6 - count($priceArray));
             }
         }
 
+        #bp - Best Price, g1 - next game and etc.
+        $gameInsert = array();
 
 
+        foreach (self::$gamesPrice as $gameID => $sortGames) {
+
+            $countryTable = key($sortGames);
+            $bestPriceData = $sql->query("SELECT * FROM {$countryTable} WHERE game_id = '{$gameID}'")->fetch_object();
+            next($sortGames);
+            $countryTable = key($sortGames);
+            $g1Data = $this->checkQuery($sql->query("SELECT * FROM {$countryTable} WHERE game_id = '{$gameID}'"));
+            next($sortGames);
+            $countryTable = key($sortGames);
+            $g2Data = $this->checkQuery($sql->query("SELECT * FROM {$countryTable} WHERE game_id = '{$gameID}'"));
+            next($sortGames);
+            $countryTable = key($sortGames);
+            $g3Data = $this->checkQuery($sql->query("SELECT * FROM {$countryTable} WHERE game_id = '{$gameID}'"));
+            next($sortGames);
+            $countryTable = key($sortGames);
+            $g4Data = $this->checkQuery($sql->query("SELECT * FROM {$countryTable} WHERE game_id = '{$gameID}'"));
+            next($sortGames);
+            $countryTable = key($sortGames);
+            $g5Data = $this->checkQuery($sql->query("SELECT * FROM {$countryTable} WHERE game_id = '{$gameID}'"));
+
+            $gameInsert[$gameID] = [
+                'game_id' => $gameID,
+                'game_name' => $this->getGameName($sql, $gameID),
+                'discount' => $bestPriceData->discount,
+                'bp_country' => $bestPriceData->country,
+                'bp_link' => $bestPriceData->game_link,
+                'bp_price' => $bestPriceData->game_price,
+                'bp_before_discount' => $bestPriceData->before_discount,
+                'g1_country' => $g1Data->country,
+                'g1_link' => $g1Data->game_link,
+                'g1_price' => $g1Data->game_price,
+                'g1_before_discount' => $g1Data->before_discount,
+                'g2_country' => $g2Data->country,
+                'g2_link' => $g2Data->game_link,
+                'g2_price' => $g2Data->game_price,
+                'g2_before_discount' => $g2Data->before_discount,
+                'g3_country' => $g3Data->country,
+                'g3_link' => $g3Data->game_link,
+                'g3_price' => $g3Data->game_price,
+                'g3_before_discount' => $g3Data->before_discount,
+                'g4_country' => $g4Data->country,
+                'g4_link' => $g4Data->game_link,
+                'g4_price' => $g4Data->game_price,
+                'g4_before_discount' => $g4Data->before_discount,
+                'g5_country' => $g4Data->country,
+                'g5_link' => $g4Data->game_link,
+                'g5_price' => $g4Data->game_price,
+                'g5_before_discount' => $g4Data->before_discount
+            ];
 
 
+        }
 
-        echo '<pre>';
-        var_dump(self::$gamesID);
-        echo '</pre>';
+        $Database->truncateTable($sql, 'ready');
+        foreach ($gameInsert as $gameData) {
+
+            $Database->insertData($sql, 'ready', $gameData);
+
+        }
+
+//        echo '<pre>';
+//        var_dump($gameInsert);
+//        echo '</pre>';
 
         $sql->close();
 

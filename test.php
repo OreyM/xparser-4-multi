@@ -1,330 +1,166 @@
 <?php
+require_once 'phpQuery/phpQuery.php';
+require_once 'Curl.php';
 
-$array = [1, 2, 3, 4, 5, 6, 7];
+class SomePage {
 
-if(count($array) > 5){
-    $delete = 5 - $count;
-    $array = array_slice($array,0, 5 - count($array));
+    public function getSomePageData ($url) {
+
+        $dataUrl = array();
+
+        $curlData = (new Curl($url))->getCurlData();
+        $elementParsing = phpQuery::newDocument($curlData);
+
+
+
+        foreach ($elementParsing as $parsingData) {
+//                                       ''#ContentBlockList_1 .gameDivsWrapper .m-product-placement-item') as $parsingData'
+            $parsingData = pq($parsingData);
+
+            echo $parsingData;
+
+            $productLink = $parsingData->find('a')->attr('href');
+
+//            if(substr($productLink, -6) == 'search')
+//                $productLink = str_replace('?cid=msft_web_search', '', $productLink);
+
+            $productID = substr($productLink, -12);
+
+            $dataUrl[] = $productID;
+        }
+        return $dataUrl;
+    }
 }
 
 
 
 
-echo '<pre>';
-var_dump($array);
-echo '</pre>';
+$start = microtime(true);
+require_once 'config/config.php';
+require_once 'classes/Parsing.php';
+require_once 'classes/GamesData.php';
+
+require_once 'classes/InsertData.php';
+require_once 'classes/GenerateData.php';
+require_once 'classes/MissGames.php';
+require_once 'classes/CreateTable.php';
 
 
-//require_once 'phpQuery/phpQuery.php';
-//require_once 'MultiCurl.php';
-//require_once 'Curl.php';
-//require_once 'Database.php';
-//
-//class Parsing{
-//
-//    private static
-//        $parsingUrls = array(),
-//        $gamesData = array(),
-//        $gamesUrlsForParsing = array(),
-//        $imagesUrls = array();
-//
-//    private
-//        $nextPageArray = array();
-//
-//    public function __construct(){
-//
-//    }
-//
-//    static public function getGeneralUrls($countryID, array $sitePage){
-//
-//        foreach ($sitePage as $sitePageIdentif) {
-//            self::$parsingUrls[] = GAME_URL . $countryID . $sitePageIdentif;
-//        }
-//
-//        return self::$parsingUrls;
-//    }
-//
-//    private function discountType(phpQueryObject $parsingData, $productPrice, $productBeforeDiscountPrice){
-//
-//        if($productPrice === 'Free' || !empty($productBeforeDiscountPrice)){
-//            $discountType = $parsingData->find('.c-price span img')->attr('alt');
-//            if(empty($discountType)){
-//                $discountType = $parsingData->find('.c-price > span:last')->text();
-//                if(empty($discountType)){
-//                    $discountType = 'Discount';
-//                }
-//            }
-//        } else {
-//            $discountType = 'NONE';
-//        }
-//
-//        if($discountType === 'Discount' && $productPrice === 'Free'){
-//            $discountType = 'FreeGame';
-//        }
-//
-//        return $discountType;
-//    }
-//
-//    public function formationParsingData(array $parsingUrls, array $pageElement, $parsNextPage = False){
-//
-//        #Очищаем массив полученых ссылок на следующий парсинг
-//        $this->nextPageArray = array();
-//
-//        #Получаем массив слепков страниц для дальнейшей обработки
-//        $curlData = (new MultiCurl($parsingUrls))->getData();
-//
-//        foreach ($curlData as $somePage) {
-//
-//            #Преобразуем полученные данные в ДОМ-структуру
-//            $elementParsing = phpQuery::newDocument($somePage);
-//
-//            //echo $elementParsing;
-//
-//            #Перебераем ДОМ-элементы
-//            foreach ($elementParsing->find($pageElement['fullPage']) as $parsingData) {
-//
-//                $parsingData = pq($parsingData);
-//
-//                $productLink = GAME_URL . ($parsingData->find('> a')->attr('href'));
-//                if(substr($productLink, -5) == 'chart')
-//                    $productLink = str_replace('?cid=msft_web_chart', '', $productLink);
-//                $productID = substr($productLink, -12);
-//
-//                #Проверка для исключения дублирования внесения данных в массив игр
-//                if(!isset(self::$gamesData[$productID])){
-//
-//                    $productTitle = $parsingData->find($pageElement['titleElement'])->text();
-//                    $productPrice = trim($parsingData->find($pageElement['priceElement'])->text());
-//                    $productBeforeDiscountPrice = trim($parsingData->find($pageElement['discountElement'])->text());
-//                    $discountType = $this->discountType($parsingData, $productPrice, $productBeforeDiscountPrice);
-//
-//                    if($productPrice === $discountType)
-//                        $discountType = 'Discount';
-//
-//                    #Вносим полученные данные в массив
-//                    $productArray = [
-//                        'game_id'       => $productID,
-//                        'game_name'     => $productTitle,
-//                        'game_link'     => $productLink,
-//                        'game_price'    => $productPrice,
-//                        'before_discount' => $productBeforeDiscountPrice,
-//                        'discount' => $discountType
-//                    ];
-//
-//                    self::$gamesData[$productID] = $productArray;
-//
-//                    #Собираем урлы на бесплатные игры + без картинок
-//                    if($productArray['game_price'] === 'Free'){
-//                        self::$gamesUrlsForParsing[] = $productLink;
-//                    }
-//                    $filename = 'images/game_img/'.$productID.'.jpg';
-//                    if (!file_exists($filename)){
-//                        self::$imagesUrls[] = $productLink;
-//                    }
-//                }
-//            }
-//
-//            #Получаем ссылку на следующую страницу
-//            $nextPageUrl = $elementParsing->find('.m-pagination > .f-active')->next('')->find('a')->attr('href');
-//            #ПРоверяем что бы ссылка не заканчивалась на -1
-//            $checkCorrectUrl = substr($nextPageUrl, -2);
-//            #Если ссылка не пустая и не заканчиваеться на -1, вносим ее в массив ссылок для MultiCurl
-//            if(!empty($nextPageUrl) && $checkCorrectUrl != -1){
-//                $this->nextPageArray[] = GAME_URL . $nextPageUrl;
-//            }
-//        }
-//        #Если полученный массив ссылок не пустой, рекурсируем метод
-//        if($parsNextPage){
-//            if(!empty($this->nextPageArray)){
-//                $this->formationParsingData($this->nextPageArray, $pageElement, TRUE);
-//            }
-//        }
-//    }
-//
-//    # array some Games for parsing[string Games ID] = [
-//    #     Games url => string, 'gameLink'
-//    #     Images check => bool 'imageCheck'
-//    # ];
-//
-//    # $parsingResult = [
-//    # 'gamesData' => self::$gamesData,
-//    # 'someGameUrl' => $gamesUrlsForParsing
-//    # ];
-//    public function parsingSomeGames(array $gamePageElements, $iterations){
-//
-//        for($i = 0; $i < $iterations; ++$i){
-//            if(!empty(self::$gamesUrlsForParsing))
-//                $curlUrls[] = array_shift(self::$gamesUrlsForParsing);
-//            else
-//                break;
-//        }
-//
-//        if(!is_null($curlUrls)){
-//
-//            $curlData = (new MultiCurl($curlUrls))->getData();
-//
-//            foreach ($curlData as $url => $somePage){
-//                $elementParsing = phpQuery::newDocument($somePage);
-//                $gameID = substr($url, -12);
-//
-//                foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
-//
-//                    $parsingData = pq($parsingData);
-//                    $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
-//                    $productPrice = trim($parsingData->find($gamePageElements['freeRealPrice'])->text());
-//                    if(empty($productPrice)){
-//                        $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
-//                        $productPrice = trim($parsingData->find($gamePageElements['realPrice'])->text());
-//                    }
-//
-//                    self::$gamesData[$gameID]['before_discount'] = $productPrice;
-//
-//                }
-//            }
-//
-//            if(!empty(self::$gamesUrlsForParsing))
-//                $this->parsingSomeGames($gamePageElements, $iterations);
-//        }
-//
-//
-//
-////        return self::$gamesData;
-//    }
-//
-//    public function getImages(array $gamePageElements, $iterations){
-//
-//        for($i = 0; $i < $iterations; ++$i){
-//            if(!empty(self::$imagesUrls))
-//                $curlUrls[] = array_shift(self::$imagesUrls);
-//            else
-//                break;
-//        }
-//
-//        $curlData = (new MultiCurl($curlUrls))->getData();
-//
-//        foreach ($curlData as $url => $somePage){
-//            $elementParsing = phpQuery::newDocument($somePage);
-//            $gameID = substr($url, -12);
-//
-//            foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
-//
-//                $parsingData = pq($parsingData);
-//
-//                $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
-//                if(substr($imgElement, 0, 6) != 'https:')
-//                    $imgElement = 'https:' . $imgElement;
-//
-//                $path = 'images/game_new_img/'.$gameID.'.jpg';
-//                file_put_contents($path, file_get_contents($imgElement));
-//                echo "
-//                    <div class='container'>
-//                        <div class=\"alert alert-success\" role=\"alert\">
-//                            A new image for
-//                            <strong>" . self::$gamesData[$gameID]['game_name'] . "</strong>
-//                            ---- Game ID -
-//                            <strong>{$gameID}</strong>
-//                            ----
-//                            <a href='{$url}'>Game Link</a>
-//                        </div>
-//                    </div>
-//                ";
-//            }
-//        }
-//
-//        if(!empty(self::$imagesUrls))
-//            $this->getImages($gamePageElements, $iterations);
-//
-//    }
-//
-//    public function oneGame($url, array $gamePageElements){
-//
-//        $gameID = substr($url, -12);
-//
-//
-//        $curlData = (new Curl($url))->getCurlData();
-//
-//        #Преобразуем полученные данные в ДОМ-структуру
-//        $elementParsing = phpQuery::newDocument($curlData);
-//
-//        foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
-//
-//            $parsingData = pq($parsingData);
-//
-//
-//            $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
-//
-//            if(substr($imgElement, 0, 6) != 'https:')
-//                $imgElement = 'https:' . $imgElement;
-//
-//            $testImgElement = substr($imgElement, -3);
-//
-//            $filename = 'images/game_img/'.$gameID.'.jpg';
-//            if (!file_exists($filename)){
-//                $path = 'images/game_new_img/'.$gameID.'.jpg';
-//                file_put_contents($path, file_get_contents($imgElement));
-//            }
-////                echo $imgElement . '<br>';
-////                echo $testImgElement . '<br>';
-//        }
-//
-//
-//    }
-//
-//    public function transformPrice($counrtyIdentification) {
-//
-//        foreach (self::$gamesData as $gameID => $dataArray){
-//
-////            echo $dataArray['game_price'] . ' ----- ' . ['before_discount'] . '<br>';
-//
-//            if(!empty($dataArray['game_price']) && $dataArray['game_price'] !== 'Free'){
-//                $dataArray['game_price'] = htmlentities($dataArray['game_price']);
-//                $dataArray['game_price'] = preg_replace('/[^0-9,.]/', '', $dataArray['game_price']);
-//                if($counrtyIdentification === 'rus_ru_ru')
-//                    $dataArray['game_price'] = str_replace(',', '.', $dataArray['game_price']);
-//                self::$gamesData[$gameID]['game_price'] = (float)$dataArray['game_price'];
-//            }
-//
-//            if(!empty($dataArray['before_discount']) && $dataArray['before_discount'] !== 'Free'){
-//                $dataArray['before_discount'] = htmlentities($dataArray['before_discount']);
-//                $dataArray['before_discount'] = preg_replace('/[^0-9,.]/', '', $dataArray['before_discount']);
-//                if($counrtyIdentification === 'rus_ru_ru')
-//                    $dataArray['game_price'] = str_replace(',', '.', $dataArray['game_price']);
-//                self::$gamesData[$gameID]['before_discount']  = (float)$dataArray['before_discount'];
-//            }
-//
-////            echo $dataArray['game_price'] . ' ----- ' . ['before_discount'] . '<br>';
-//        }
-//
-//    }
-//
-//    public function addDataDB($table){
-//        $Database = Database::checkConnect();
-//        $sql = $Database->connectDatabase();
-//
-//        $Database->truncateTable($sql, $table);
-//
-//        foreach (self::$gamesData as $toDBData) {
-//
-//            $Database->insertData($sql, $table, $toDBData);
-//
-//        }
-//
-//
-//        $sql->close();
-//    }
-//
-//    public function varDump(){
-//        echo '<pre>';
-//        var_dump(self::$gamesData);
-//        echo '</pre>';
-//    }
-//
-//
-//
-//    public function clearParcingData(){
-//        self::$parsingUrls = array();
-//        $this->nextPageArray = array();
-//        self::$gamesData = array();
-//        self::$imagesUrls = array();
-//    }
-//}
+$countryArray = [
+    'usa_en_us' => '/en-us',
+    'rus_ru_ru' => '/ru-ru',
+    'evro_de_de'  => '/de-de',
+    'argentina_es_ar' => '/es-ar',
+    'brazil_pt_br' => '/pt-br',
+    'canada_en_ca' => '/en-ca',
+    'columbia_es_co' => '/es-co',
+    'hongkong_en_hk' => '/en-hk',
+    'india_en_in' => '/en-in',
+    'africa_en_za' => '/en-za',
+    'turkish_tr_tr' => '/tr-tr',
+    'singapore_en_sg' => '/en-sg',
+    'mexico_es_mx' => '/es-mx',
+    'newzeland_en_nz' => '/en-nz',
+
+//    'Australia' => '/en-au',
+//    'japan_ja_jp' => '/ja-jp',
+//    'korea_ko_kr' => '/ko-kr',
+//    'taiwann_zh_tw' => '/zh-tw',
+//    'hungary_hu_hu' => '/hu-hu',
+//    'israel_en_il' => '/en-il',
+//    'norvay_nb_no' => '/nb-no',
+//    'England' => '/en-gb',
+//    'Dania' => '/da-dk',
+//    'New Zealand' => '/en-nz',
+//    'Poland' => '/pl-pl',
+//    'Switzerland' => '/de-ch',
+//    'Chili' => '/es-cl',
+//    'Czech' => '/cs-cz',
+];
+
+$sitePage = [
+    '/store/top-paid/games/xbox',
+    '/store/best-rated/games/xbox',
+    '/store/new/games/xbox',
+    '/store/top-free/games/xbox'
+];
+
+$allGamesPageElements = [
+    'fullPage'         => '.context-list-page .m-product-placement-item',
+    'titleElement'     => '.c-heading',
+    'priceElement'     => '.c-price span[itemprop="price"]',
+    'newPriceElement'  => '.price-info .c-price .srv_price span',
+    'imageElement'     => '.srv_appHeaderBoxArt > img',
+    'discountElement'  => '.c-price s'
+];
+
+$gamePageElements = [
+    'fullPage' => '.m-product-detail-hero .m-product-detail-hero-product-placement',
+    'realPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > span',
+    'freeRealPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > .price-disclaimer > span'
+];
+
+$dataParsing = new Parsing();
+
+#Собираем курсы валют
+$dataParsing->currencyParsing('http://ru.fxexchangerate.com/currency-exchange-rates.html');
+
+foreach ($countryArray as $tableName => $countryID) {
+
+    $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
+
+    #TRUE - pars next page, FALSE - not pars next page
+    $dataParsing->formationParsingData($parsingUrls, $allGamesPageElements, $tableName, TRUE);
+    $dataParsing->parsingSomeGames($gamePageElements, $tableName, 30);
+    $dataParsing->getImages($gamePageElements, 30);
+    $dataParsing->currencyPrice($tableName);
+    $dataParsing->addDataDB($tableName);
+
+//    $dataParsing->varDump();
+    $dataParsing->clearParcingData();
+}
+
+$generateGames = new GamesData();
+$generateGames->gamesID($countryArray);
+
+##############################
+##############################
+########  PROTOTYPE ##########
+##############################
+##############################
+
+//$searchGames = new GenerateData();
+//$searchGames->checkMissGames_General($countryArray);
+//$searchGames->parsingMissGame($gamePageElements, 'usa_us_us', 20);
+//$searchGames->addDataDB('usa_en_us');
+//$searchGames->varDump();
+//$searchGames->clearParcingData();
+
+###################################################
+//$checkGames = new MissGames();
+//$checkGames->checkMissGames();
+
+####################
+####################
+#####  #############
+
+//$searchAnotherGames = new GenerateData();
+//$searchAnotherGames->checkMissGames_Another($countryArray);
+//$searchGames->parsingMissGame($gamePageElements, 'rus_ru_ru', 20);
+//$searchGames->varDump();
+//$searchGames->clearParcingData();
+
+//$someGame = new Parsing();
+#Игра есть, ценник без скидок и бесплатных игр
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/project-cars-digital-edition/bwd6mg147s5j', $gamePageElements);
+#Игры не существует
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/hasbro-family-fun-pack/c2css1s7lwbf', $gamePageElements);
+#Ссылка на игру действительна, но ценника нет - Игра только в бандле
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/dragon-age-%d0%98%d0%bd%d0%ba%d0%b2%d0%b8%d0%b7%d0%b8%d1%86%d0%b8%d1%8f/c47gzzbmr5wg', $gamePageElements);
+#Ссылка на игру дейстивительна, но игра больше не предоставляется
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/nba-2k16-preorder-edition/brj918k9k7s6', $gamePageElements);
+#Ссылка на игру дейстивительна, но игра не для ХБОКСА
+//$someGame->oneGame('https://www.microsoft.com/en-us/store/p/motogp-15/bsh5fpmr3gd8?activetab=pivot%3aoverviewtab', $gamePageElements);
+
+echo '<br>';
+printf('Скрипт выполнялся %.4F сек.', (microtime(true) - $start));
