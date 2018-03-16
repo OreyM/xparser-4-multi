@@ -38,4 +38,4 @@ $countryArray = [
 
 $generateGames = new GamesData();
 $generateGames->gamesID($countryArray);
-//require_once 'show_table.php';
+require_once 'show_table.php';

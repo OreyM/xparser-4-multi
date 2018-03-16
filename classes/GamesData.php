@@ -37,7 +37,7 @@ class GamesData {
             }
         }
 
-        return $gameName;
+        return html_entity_decode(html_entity_decode($gameName));
     }
 
     private function checkQuery($data) {
@@ -63,6 +63,7 @@ class GamesData {
 
         $array = array();
 
+        #Получаем массив ИД всех игр
         foreach ($countryArray as $countryTable => $countryUrl) {
 
             $resultQuery = $sql->query("SELECT game_id FROM {$countryTable}");
@@ -76,15 +77,26 @@ class GamesData {
             $resultQuery->free();
         }
 
+        #Добавляем в массив self::$gamesPrice массив цен на игры
         foreach (self::$gamesPrice as $gameID => &$priceArray) {
 
             foreach ($countryArray as $countryTable => $countryUrl) {
                 $resultQuery = $sql->query("SELECT game_price FROM {$countryTable} WHERE game_id = '{$gameID}'");
                 $getPrice = $resultQuery->fetch_object();
+                $price = $getPrice->game_price;
+
+                if($getPrice->game_price == 99999.99) {
+                    $resultQuery->free();
+                    $resultQuery = $sql->query("SELECT before_discount FROM {$countryTable} WHERE game_id = '{$gameID}'");
+                    $getPrice = $resultQuery->fetch_object();
+                    $price = $getPrice->before_discount;
+                }
+
                 if(!is_null($getPrice->game_price))
-                    $priceArray[$countryTable] = (float)$getPrice->game_price;
+                    $priceArray[$countryTable] = (float)$price;
                 else
-                    $priceArray[$countryTable] = $getPrice->game_price;
+                    $priceArray[$countryTable] = $price;
+
                 $resultQuery->free();
             }
         }
@@ -101,6 +113,10 @@ class GamesData {
                 $priceArray = array_slice($priceArray,0, 6 - count($priceArray));
             }
         }
+
+//        echo '<pre>';
+//        var_dump(self::$gamesPrice);
+//        echo '</pre>';
 
         #bp - Best Price, g1 - next game and etc.
         $gameInsert = array();
@@ -155,8 +171,6 @@ class GamesData {
                 'g5_price' => $g4Data->game_price,
                 'g5_before_discount' => $g4Data->before_discount
             ];
-
-
         }
 
         $Database->truncateTable($sql, 'ready');
