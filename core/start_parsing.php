@@ -23,19 +23,19 @@ require_once '../classes/GamesData.php';
 
 
 $countryArray = [
-    'usa_en_us' => '/en-us',
-//    'rus_ru_ru' => '/ru-ru',
-//    'argentina_es_ar' => '/es-ar',
-//    'brazil_pt_br' => '/pt-br',
-//    'canada_en_ca' => '/en-ca',
-//    'columbia_es_co' => '/es-co',
-//    'hongkong_en_hk' => '/en-hk',
-//    'india_en_in' => '/en-in',
-//    'africa_en_za' => '/en-za',
-//    'turkish_tr_tr' => '/tr-tr',
-//    'singapore_en_sg' => '/en-sg',
-//    'mexico_es_mx' => '/es-mx',
-//    'newzeland_en_nz' => '/en-nz',
+     'usa_en_us' => '/en-us',
+     'rus_ru_ru' => '/ru-ru',
+     'argentina_es_ar' => '/es-ar',
+     'brazil_pt_br' => '/pt-br',
+     'canada_en_ca' => '/en-ca',
+     'columbia_es_co' => '/es-co',
+     'hongkong_en_hk' => '/en-hk',
+     'india_en_in' => '/en-in',
+     'africa_en_za' => '/en-za',
+     'turkish_tr_tr' => '/tr-tr',
+     'singapore_en_sg' => '/en-sg',
+     'mexico_es_mx' => '/es-mx',
+     'newzeland_en_nz' => '/en-nz',
 
 //    'Australia' => '/en-au',
 //    'evro_de_de'  => '/de-de',
@@ -56,9 +56,9 @@ $countryArray = [
 
 $sitePage = [
     '/store/top-paid/games/xbox',
-//    '/store/best-rated/games/xbox',
-//    '/store/new/games/xbox',
-//    '/store/top-free/games/xbox'
+    '/store/best-rated/games/xbox',
+    '/store/new/games/xbox',
+    '/store/top-free/games/xbox'
 ];
 
 $allGamesPageElements = [
@@ -86,13 +86,13 @@ foreach ($countryArray as $tableName => $countryID) {
     $parsingUrls = Parsing::getGeneralUrls($countryID, $sitePage);
 
     #TRUE - pars next page, FALSE - not pars next page
-    $dataParsing->formationParsingData($parsingUrls, $allGamesPageElements, $tableName, FALSE);
-    $dataParsing->parsingSomeGames($gamePageElements, $tableName, 30);
-//    $dataParsing->getImages($gamePageElements, 30);
+    $dataParsing->formationParsingData($parsingUrls, $allGamesPageElements, $tableName, TRUE);
+    $dataParsing->parsingSomeGames($gamePageElements, $tableName, 20);
+    $dataParsing->getImages($gamePageElements, 20);
     $dataParsing->currencyPrice($tableName);
     $dataParsing->addDataDB($tableName);
 
-    $dataParsing->varDump();
+//    $dataParsing->varDump();
 
 
     $country = $dataParsing->getCountryName($tableName);

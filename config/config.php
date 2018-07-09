@@ -6,10 +6,10 @@ ini_set('display_startup_errors', 1);
 ini_set('max_execution_time', '320000');
 
 //DATA to connect to Local DataBase
-define(HOST, 'localhost');
+define(HOST, 'localhost:8889');
 define(DATABASE, 'parser');
 define(USERNAME, 'root');
-define(PASSWORD, '');
+define(PASSWORD, 'root');
 
 //URL DEFINE
 define(GAME_URL, 'https://www.microsoft.com');
@@ -19,7 +19,7 @@ define(GAME_URL, 'https://www.microsoft.com');
 //define(TOP_FREE, '/store/top-free/games/xbox');
 define(EXCHANGE_RATES_URL, 'http://ru.fxexchangerate.com/currency-exchange-rates.html');
 
-define(VERSION, '0.3.15');
+define(VERSION, '0.7.9');
 
 //function autoloadClasses($className) {
 //    $classPath = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $className . '.php';

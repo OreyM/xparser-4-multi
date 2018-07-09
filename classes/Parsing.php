@@ -37,15 +37,41 @@ class Parsing{
     private function discountType(phpQueryObject $parsingData, $productPrice, $productBeforeDiscountPrice, $countryIdentification){
 
         if($productPrice === 9999999 || !empty($productBeforeDiscountPrice)){
-            $discountType = $parsingData->find('.c-price span img')->attr('alt');
-            if(empty($discountType)){
-                $discountType = trim($parsingData->find('.c-price > span:last')->text());
-                if(stristr($discountType, 'Ücretsiz') || stristr($discountType, '₺') || stristr($discountType, 'esetén') ||
-                    stristr($discountType, '적용)'))
-                    $discountType = 'EA Access';
-                if(empty($discountType))
-                    $discountType = 'Discount';
+
+            $disount = $parsingData->find('.c-price > span > span:last > span')->attr('class');
+
+            if (!empty($disount)) {
+
+                if(strpos($disount, 'gold')) {
+                    $discountType = 'Gold';
+                    return $discountType;
+                }
+
+                if(strpos($disount, 'gamepass')) {
+                    $discountType = 'GamePass';
+                    return $discountType;
+                }
+
+            } else {
+
+                $discountType = $parsingData->find('.c-price span > img')->attr('alt');
+
+                if(empty($discountType)){
+
+                    if(trim($parsingData->find('.c-price > span > span:last')->text()) == 'EA Access')
+                        return 'EA Access';
+
+                    $discountType = trim($parsingData->find('.c-price > span:last')->text());
+                    if(stristr($discountType, 'Ücretsiz') || stristr($discountType, '₺') || stristr($discountType, 'esetén') ||
+                        stristr($discountType, '적용)'))
+                        $discountType = 'EA Access';
+                    if(empty($discountType) || $discountType == '+')
+                        $discountType = 'Discount';
+                } else {
+                    return $discountType;
+                }
             }
+
         } else {
             $discountType = 'NONE';
         }
@@ -214,6 +240,8 @@ class Parsing{
                     if (!file_exists($filename)){
                         self::$imagesUrls[] = $productLink;
                     }
+
+                    // echo $productArray['game_name'] . ' => ' . $productArray['game_price'] . ' => ' . $productArray['discount'] . '<br>';
                 }
             }
             #Получаем ссылку на следующую страницу

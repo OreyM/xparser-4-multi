@@ -11,11 +11,12 @@ class SomePage {
         $curlData = (new Curl($url))->getCurlData();
         $elementParsing = phpQuery::newDocument($curlData);
 
-        foreach ($elementParsing->find('#ContentBlockList_1 .gameDivsWrapper .m-product-placement-item') as $parsingData) {
+        foreach ($elementParsing->find('table tr td') as $parsingData) {
 //            '#ContentBlockList_1 .gameDivsWrapper .m-product-placement-item' - MS XBOX
 //            'table tr td' - XBOX
 
             $parsingData = pq($parsingData);
+
 
             $productLink = $parsingData->find('a')->attr('href');
 
