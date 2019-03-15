@@ -13,7 +13,7 @@ class GamesData {
             'india_en_in',
             'newzeland_en_nz',
             'canada_en_ca',
-            'africa_en_za',
+            'afric_en_za',
             'rus_ru_ru',
             'evro_de_de',
             'mexico_es_mx',
@@ -171,6 +171,55 @@ class GamesData {
                 'g5_price' => $g4Data->game_price,
                 'g5_before_discount' => $g4Data->before_discount
             ];
+        }
+
+        foreach ($gameInsert as $newGameID => $newGameData) {
+
+//            var_dump($newGameData);
+
+            if($newGameData['bp_country'] == 'Турция') {
+
+                if ( $newDiscount = $sql->query("SELECT discount FROM usa_en_us WHERE game_id = '{$newGameID}'") ) {
+                    $newDiscount = $newDiscount->fetch_object();
+                    $newDiscount = $newDiscount->discount;
+                    if (!empty($newDiscount) ) {
+                        $gameInsert[$newGameID]['discount'] = $newDiscount;
+                    } else {
+                        if ( $newGameData['discount'] == 'D&acirc;hi' ) {
+                            $gameInsert[$newGameID]['discount'] = 'EA Access';
+                        } else {
+                            $gameInsert[$newGameID]['discount'] = $newGameData['discount'];
+                        }
+
+                    }
+
+                } else {
+//                    $newDiscount = $newGameData['discount'];
+//                    echo $newGameData['discount'];
+//                    $gameInsert[$newGameID]['discount'] = $newGameData['discount'];
+                }
+//                elseif ( $newDiscount = $sql->query("SELECT discount FROM rus_ru_ru WHERE game_id = '{$newGameID}'") ) {
+//                    $newDiscount = $newDiscount->fetch_object();
+//                }
+//                elseif ( $newDiscount = $sql->query("SELECT discount FROM argentina_es_ar WHERE game_id = '{$newGameID}'") ) {
+//                    $newDiscount = $newDiscount->fetch_object();
+//                }
+//                $newDiscount = $sql->query("SELECT discount FROM usa_en_us WHERE game_id = '{$newGameID}'");
+
+//                $discount = $newDiscount->discount;
+
+                echo ' ' .$gameInsert[$newGameID]['game_name'] . ' ' . '<strong>' . $gameInsert[$newGameID]['discount'] . '</strong><br>';
+
+
+//                if( $newDiscount) {
+//                    $newDiscount = $newDiscount->fetch_object();
+//                    echo ' ' .$gameInsert[$newGameID]['game_name'] . ' ' . $newDiscount->discount . '<br>';
+//                    $gameInsert[$newGameID]['discount'] = $newDiscount->discount;
+//                } else {
+//                    $newDiscount = $Database->selectData($sql, 'rus_ru_ru', 'discount')->fetch_object();
+//                    $gameInsert[$newGameID]['discount'] = $newDiscount->discount;
+//                }
+            }
         }
 
         $Database->truncateTable($sql, 'ready');

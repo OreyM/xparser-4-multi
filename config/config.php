@@ -19,7 +19,7 @@ define(GAME_URL, 'https://www.microsoft.com');
 //define(TOP_FREE, '/store/top-free/games/xbox');
 define(EXCHANGE_RATES_URL, 'http://ru.fxexchangerate.com/currency-exchange-rates.html');
 
-define(VERSION, '0.7.9');
+define(VERSION, '0.7.10');
 
 //function autoloadClasses($className) {
 //    $classPath = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $className . '.php';

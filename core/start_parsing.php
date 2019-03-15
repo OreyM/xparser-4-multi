@@ -24,18 +24,18 @@ require_once '../classes/GamesData.php';
 
 $countryArray = [
      'usa_en_us' => '/en-us',
-     'rus_ru_ru' => '/ru-ru',
-     'argentina_es_ar' => '/es-ar',
+      'rus_ru_ru' => '/ru-ru',
+      'argentina_es_ar' => '/es-ar',
      'brazil_pt_br' => '/pt-br',
      'canada_en_ca' => '/en-ca',
      'columbia_es_co' => '/es-co',
      'hongkong_en_hk' => '/en-hk',
-     'india_en_in' => '/en-in',
-     'africa_en_za' => '/en-za',
-     'turkish_tr_tr' => '/tr-tr',
-     'singapore_en_sg' => '/en-sg',
-     'mexico_es_mx' => '/es-mx',
-     'newzeland_en_nz' => '/en-nz',
+       'india_en_in' => '/en-in',
+       'afric_en_za' => '/en-za',
+       'turkish_tr_tr' => '/tr-tr',
+      'singapore_en_sg' => '/en-sg',
+      'mexico_es_mx' => '/es-mx',
+      'newzeland_en_nz' => '/en-nz',
 
 //    'Australia' => '/en-au',
 //    'evro_de_de'  => '/de-de',
@@ -56,14 +56,14 @@ $countryArray = [
 
 $sitePage = [
     '/store/top-paid/games/xbox',
-    '/store/best-rated/games/xbox',
-    '/store/new/games/xbox',
-    '/store/top-free/games/xbox'
+     '/store/best-rated/games/xbox',
+     '/store/new/games/xbox',
+     '/store/top-free/games/xbox'
 ];
 
 $allGamesPageElements = [
     'fullPage'         => '.context-list-page .m-product-placement-item',
-    'titleElement'     => '.c-heading',
+    'titleElement'     => 'h3',
     'priceElement'     => '.c-price span[itemprop="price"]',
     'newPriceElement'  => '.price-info .c-price .srv_price span',
     'imageElement'     => '.srv_appHeaderBoxArt > img',
@@ -71,7 +71,7 @@ $allGamesPageElements = [
 ];
 
 $gamePageElements = [
-    'fullPage' => '.m-product-detail-hero .m-product-detail-hero-product-placement',
+    'fullPage' => '.pi-product-image',
     'realPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > span',
     'freeRealPrice' => '.context-product-placement-data dl dd:eq(1) > .price-info > .c-price > .price-text > .price-disclaimer > span'
 ];
@@ -79,7 +79,7 @@ $gamePageElements = [
 $dataParsing = new Parsing();
 
 #Собираем курсы валют
-$dataParsing->currencyParsing('http://ru.fxexchangerate.com/currency-exchange-rates.html');
+$dataParsing->currencyParsing('https://ru.fxexchangerate.com/currency-exchange-rates.html');
 
 foreach ($countryArray as $tableName => $countryID) {
 

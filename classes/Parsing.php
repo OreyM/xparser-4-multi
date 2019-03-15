@@ -38,7 +38,7 @@ class Parsing{
 
         if($productPrice === 9999999 || !empty($productBeforeDiscountPrice)){
 
-            $disount = $parsingData->find('.c-price > span > span:last > span')->attr('class');
+            $disount = $parsingData->find('#productplacementlist_3 > .c-price > span > span > .x-screen-reader')->text();
 
             if (!empty($disount)) {
 
@@ -47,7 +47,7 @@ class Parsing{
                     return $discountType;
                 }
 
-                if(strpos($disount, 'gamepass')) {
+                if(strpos($disount, 'Game Pass')) {
                     $discountType = 'GamePass';
                     return $discountType;
                 }
@@ -67,7 +67,9 @@ class Parsing{
                         $discountType = 'EA Access';
                     if(empty($discountType) || $discountType == '+')
                         $discountType = 'Discount';
+
                 } else {
+
                     return $discountType;
                 }
             }
@@ -90,7 +92,7 @@ class Parsing{
         $price = preg_replace('/[^0-9,.]/', '', $price);
 
         if($countryIdentification === 'rus_ru_ru' || $countryIdentification === 'evro_de_de' || $countryIdentification === 'brazil_pt_br' ||
-           $countryIdentification === 'africa_en_za' || $countryIdentification === 'turkish_tr_tr' || $countryIdentification === 'norvay_nb_no')
+           $countryIdentification === 'afric_en_za' || $countryIdentification === 'turkish_tr_tr' || $countryIdentification === 'norvay_nb_no')
             $price = str_replace(',', '.', $price);
 
         if($countryIdentification === 'argentina_es_ar' || $countryIdentification === 'columbia_es_co'){
@@ -128,7 +130,7 @@ class Parsing{
                 return 'Гонконг';
             case 'india_en_in':
                 return 'Индия';
-            case 'africa_en_za':
+            case 'afric_en_za':
                 return 'Африка';
             case 'turkish_tr_tr':
                 return 'Турция';
@@ -159,7 +161,7 @@ class Parsing{
             'columbia_es_co'    => (float)$currency->find('.pure-table:eq(0) tbody tr:eq(11) td:eq(4)')->text(),
             'hongkong_en_hk'    => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(6) td:eq(4)')->text(),
             'india_en_in'       => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(8) td:eq(4)')->text(),
-            'africa_en_za'      => (float)$currency->find('.pure-table:eq(4) tbody tr:eq(27) td:eq(4)')->text(),
+            'afric_en_za'      => (float)$currency->find('.pure-table:eq(4) tbody tr:eq(27) td:eq(4)')->text(),
             'turkish_tr_tr'     => (float)$currency->find('.pure-table:eq(2) tbody tr:eq(22) td:eq(4)')->text(),
             'singapore_en_sg'   => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(23) td:eq(4)')->text(),
             'japan_ja_jp'       => (float)$currency->find('.pure-table:eq(1) tbody tr:eq(9) td:eq(4)')->text(),
@@ -197,27 +199,58 @@ class Parsing{
             #Преобразуем полученные данные в ДОМ-структуру
             $elementParsing = phpQuery::newDocument($somePage);
 
-            //echo $elementParsing;
+//            echo $elementParsing;
 
             #Перебераем ДОМ-элементы
-            foreach ($elementParsing->find($pageElement['fullPage']) as $parsingData) {
+            foreach ($elementParsing->find('.context-list-page .m-channel-placement-item') as $parsingData) {
 
                 $parsingData = pq($parsingData);
+
+//                var_dump($parsingData);
 
                 $productLink = GAME_URL . ($parsingData->find('> a')->attr('href'));
                 if(substr($productLink, -5) == 'chart')
                     $productLink = str_replace('?cid=msft_web_chart', '', $productLink);
                 $productID = substr($productLink, -12);
 
+//                echo $productLink;
+
+
                 #Проверка для исключения дублирования внесения данных в массив игр
                 if(!isset(self::$gamesData[$productID])){
 
                     $productTitle = $parsingData->find($pageElement['titleElement'])->text();
-                    $productPrice = $this->transformPrice(trim($parsingData->find($pageElement['priceElement'])->text()), $countryIdentification);
-                    $productBeforeDiscountPrice = $this->transformPrice(trim($parsingData->find($pageElement['discountElement'])->text()), $countryIdentification);
-                    if($productPrice == 0)
+
+                    $price = $parsingData->find($pageElement['priceElement'])->text();
+                    if ( strpos($price, '$') && $countryIdentification != 'usa_en_us' && $countryIdentification == 'rus_ru_ru' ) {
+                        $productPrice = $price;
+//                        echo $productPrice;
+                    } else {
+                        $productPrice = $this->transformPrice(trim($price), $countryIdentification);
+
+                    }
+
+                    $beforePrice = $parsingData->find($pageElement['discountElement'])->text();
+                    if ( strpos($beforePrice, '$') && $countryIdentification != 'usa_en_us' && $countryIdentification == 'rus_ru_ru' ) {
+                        $productBeforeDiscountPrice = $beforePrice;
+                    } else {
+                        $productBeforeDiscountPrice = $this->transformPrice(trim($beforePrice), $countryIdentification);
+                    }
+
+
+                    if($productPrice == 0 && !strpos($productPrice, '$'))
                         $productPrice = 9999999;
                     $discountType = $this->discountType($parsingData, $productPrice, $productBeforeDiscountPrice, $countryIdentification);
+
+                    $discountType = trim($discountType);
+
+                    if(strpos($discountType, 'Gold')) {
+                        $discountType = 'Gold';
+                    }
+
+                    if(strpos($discountType, 'Game Pass') || $discountType == 'Dâhil')  {
+                        $discountType = 'GamePass';
+                    }
 
                     #Вносим полученные данные в массив
                     $productArray = [
@@ -241,7 +274,9 @@ class Parsing{
                         self::$imagesUrls[] = $productLink;
                     }
 
-                    // echo $productArray['game_name'] . ' => ' . $productArray['game_price'] . ' => ' . $productArray['discount'] . '<br>';
+
+
+//                    echo $productArray['game_name'] . ' => ' . $productArray['game_price'] . ' => ' . $productArray['discount'] . '<br>';
                 }
             }
             #Получаем ссылку на следующую страницу
@@ -284,14 +319,17 @@ class Parsing{
                 $elementParsing = phpQuery::newDocument($somePage);
                 $gameID = substr($url, -12);
 
-                foreach ($elementParsing->find($gamePageElements['fullPage']) as $parsingData) {
+                foreach ($elementParsing->find($gamePageElements['#purchaseColumn']) as $parsingData) {
 
                     $parsingData = pq($parsingData);
-                    $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
+
+                    // $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
                     $productPrice = $this->transformPrice(trim($parsingData->find($gamePageElements['freeRealPrice'])->text()), $countryIdentification);
+
+                    
                     if(empty($productPrice)){
                         $parsingData->find($gamePageElements['realPrice'] . ' > sup')->remove();
-                        $productPrice = $this->transformPrice(trim($parsingData->find($gamePageElements['realPrice'])->text()), $countryIdentification);
+                        $productPrice = $this->transformPrice(trim($parsingData->find('#productPrice span')->text()), $countryIdentification);
                     }
 
                     if($productPrice == 0)
@@ -328,7 +366,7 @@ class Parsing{
 
                     $parsingData = pq($parsingData);
 
-                    $imgElement = $elementParsing->find('.srv_appHeaderBoxArt > img')->attr('src');
+                    $imgElement = $elementParsing->find('picture > img')->attr('src');
                     if(substr($imgElement, 0, 6) != 'https:')
                         $imgElement = 'https:' . $imgElement;
 
@@ -372,11 +410,23 @@ class Parsing{
 
 //                echo $gameData['game_price'] . '*' . self::$currencyData[$countryIdentification] . '<br>';
 
-                    if($gameData['game_price'] !== 9999999)
-                        self::$gamesData[$key]['game_price'] = $gameData['game_price'] * self::$currencyData[$countryIdentification];
-                    if($gameData['before_discount'] !== 9999999)
-                        self::$gamesData[$key]['before_discount'] = $gameData['before_discount'] * self::$currencyData[$countryIdentification];
+                    if($gameData['game_price'] !== 9999999) {
+                        if ( strpos($gameData['game_price'], '$')  ) {
+                            $price = $this->transformPrice(trim($gameData['game_price']), $countryIdentification);
+                            self::$gamesData[$key]['game_price'] = $price;
+                        } else {
+                            self::$gamesData[$key]['game_price'] = $gameData['game_price'] * self::$currencyData[$countryIdentification];
+                        }
+                    }
 
+                    if($gameData['before_discount'] !== 9999999) {
+                        if (strpos($gameData['before_discount'], '$')) {
+                            $bfPrie = $this->transformPrice(trim($gameData['before_discount']), $countryIdentification);
+                            self::$gamesData[$key]['before_discount'] = $bfPrie;
+                        } else {
+                            self::$gamesData[$key]['before_discount'] = $gameData['before_discount'] * self::$currencyData[$countryIdentification];
+                        }
+                    }
             }
         }
 
